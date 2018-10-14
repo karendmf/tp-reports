@@ -1,0 +1,22 @@
+﻿api/
+ ├── app/
+ │   ├── Http/
+ │   │   └── Controllers/ (controladores)
+ │   └── Models/ (modelos)
+ └── routes/
+      └── web.php (rutas endpoint)
+ 
+> composer update
+> php -S localhost:8000 -t public
+
+-----------------------------------------------------------------------------
+
+
+Se modifico el modelo por defecto "app/Models/User.php"
+
+Se implementa la libreria "tymon/jwt-auth", para la autenticación por tokens.
+
+Se crea el controlador "app/Http/Controllers/AuthController.php"
+
+> funcion "login"
+> funcion "register"
