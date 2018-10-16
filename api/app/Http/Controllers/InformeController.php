@@ -19,7 +19,7 @@ class InformeController extends Controller
 
     public function index()
     {
-        $informes = Informe::all();
+        $informes = Informe::with('zona', 'estado', 'prioridad', 'adjunto')->get();
         return response()->json($informes);
     }
 
@@ -41,6 +41,10 @@ class InformeController extends Controller
     public function show($id)
     {
         $informe = Informe::find($id);
+        $informe->estado;
+        $informe->prioridad;
+        $informe->zona;
+        $informe->adjunto;
         return response()->json($informe);
     }
 

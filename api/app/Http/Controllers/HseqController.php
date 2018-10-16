@@ -20,11 +20,6 @@ class HseqController extends Controller
 
     public function index()
     {
-        /* $hseq = DB::table('hseq')
-            ->join('cargo', 'hseq.idcargo', '=', 'cargo.idcargo')
-            ->join('persona', 'hseq.idpersona', '=', 'persona.idpersona')
-            ->select('persona.nombre as nombre', 'persona.apellido','persona.dni','persona.telefono','persona.email','persona.usuario','persona.legajo', 'cargo.nombre as cargo')
-            ->get(); */
         $hseq = Hseq::with('cargo','user')->get();
         return response()->json($hseq);
     }

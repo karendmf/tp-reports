@@ -24,7 +24,7 @@ class AuthController extends Controller
     //Listar todos los usuarios
     public function index()
     {
-        $usuarios = User::all();
+        $usuarios = User::with('hseq')->get();
         return response()->json($usuarios);
     }
 

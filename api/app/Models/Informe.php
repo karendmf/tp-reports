@@ -28,5 +28,16 @@ class Informe extends Model
 
 ];
  */
-
+    public function estado(){
+        return $this->belongsTo(Estado::class, 'idestado');
+    }
+    public function prioridad(){
+        return $this->belongsTo(Prioridad::class, 'idprioridad');
+    }
+    public function zona(){
+        return $this->belongsTo(Zona::class, 'idzona');
+    }
+    public function adjunto(){
+        return $this->hasMany(Adjuntoinforme::class, 'idadjunto');
+    }
 }

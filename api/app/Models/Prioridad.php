@@ -28,5 +28,7 @@ class Prioridad extends Model
 
 ];
  */
-
+    public function informe(){
+        return $this->hasMany(Informe::class, 'idinforme');
+    }
 }

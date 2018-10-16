@@ -27,6 +27,9 @@ class Estado extends Model
     /* protected $hidden = [
 
 ];
- */
+    */
+    public function informe(){
+        return $this->hasMany(Informe::class, 'idinforme');
+    }
 
 }

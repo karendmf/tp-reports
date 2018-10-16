@@ -90,7 +90,7 @@ $router->group(['prefix' => 'zona'], function () use ($router) {
 $router->group(['middleware' => 'jwt-auth'], function ($app) {
     $app->get('/test', function () {
         return response()->json([
-            'message' => 'Holi!',
+            'message' => 'Holi! Usuario autorizado',
         ]);
     });
     $app->get('/user', 'AuthController@test');
