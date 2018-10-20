@@ -1,57 +1,87 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import router from '@/router'
+import Vue from 'vue' 
+import Vuex from 'vuex' 
+import router from '@/router' 
 import axios from 'axios'
-
-Vue.use(Vuex)
-
-export const store = new Vuex.Store({
-
-  state: {
-    appTitle: 'reportS',
-    user: null,
+import createPersistedState from 'vuex-persistedstate'
+ 
+Vue.use(Vuex) 
+ 
+export const store = new Vuex.Store({ 
+ 
+  state: { 
+    user: null, 
     error: null,
-    loading: false,
-    isLogged: false
-  },
-  mutations: {
-    LOGIN_USER (state) {
+    h: null, 
+    loading: false, 
+    isLogged: false 
+  }, 
+  mutations: { 
+    LOGIN_USER (state) { 
         state.isLogged = true
-    },
-    LOGOUT_USER (state) {
+    }, 
+    LOGOUT_USER (state) { 
         state.isLogged = false
-    },
-    setUser (state, payload) {
-      state.user = payload
-    },
-    setError (state, payload) {
-      state.error = payload
-    },
-    setLoading (state, payload) {
-      state.loading = payload
-    }
-  },
+        state.user = null
+        state.h= null
+        localStorage.removeItem('token')
+    }, 
+    setUser (state, payload) { 
+      state.user = payload 
+    }, 
+    setH (state, payload) { 
+      state.h = payload 
+    }, 
+    setError (state, payload) { 
+      state.error = payload 
+    }, 
+    setLoading (state, payload) { 
+      state.loading = payload 
+    } 
+  }, 
   actions: {
-    userSignIn ({commit}, payload) {
+    /* getIDH({commit}){
       commit('setLoading', true)
-      axios.post('http://localhost:8000/login',{
-          usuario: payload.usuario,
-          password: payload.password
-      })
-      .then(function (response) {
-        commit('setUser', {usuario: response.data.user.usuario})
+      axios.get('http://localhost:8000/hseq/id',{ 
+        headers: { 
+          Authorization: 'Bearer ' + localStorage.getItem('token') 
+        } 
+      }). then(function (response){
         commit('setLoading', false)
-        commit('setError', null)
+        commit('setH', {h: response.data.idhseq})
+      })
+    }, */
+    userSignIn ({commit}, payload) { 
+      commit('setLoading', true) 
+      axios.post('http://localhost:8000/login',{ 
+          usuario: payload.usuario, 
+          password: payload.password 
+      }) 
+      .then(function (response) { 
+        commit('setUser', {u: response.data.usuario.idpersona}) 
+        commit('setLoading', false) 
+        commit('setError', null) 
         store.commit('LOGIN_USER')
-        router.push('/home')
+        
+        router.push('/') 
         localStorage.setItem('token', response.data.token)
-        //console.log(response.data);
-      })
-      .catch(error => {
-        commit('setError', error.message)
-        commit('setLoading', false)
-      })
-    }
+        if (response.data.usuario.rol === 'admin' || response.data.usuario.rol === 'hseq'){
+          axios.get('http://localhost:8000/hseq/id',{ 
+            headers: { 
+              Authorization: 'Bearer ' + localStorage.getItem('token') 
+            } 
+          }). then(function (response){
+            commit('setH', {h: response.data[0].idhseq})
+            console.log(response.data[0].idhseq);
+          })
+        }
+        //console.log(response.data); 
+      }) 
+      .catch(error => { 
+        commit('setError', error.message) 
+        commit('setLoading', false) 
+      }) 
+    } 
   },
-  getters: {}
+  plugins: [createPersistedState()],
+  getters: {} 
 })

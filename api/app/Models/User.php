@@ -21,7 +21,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      * @var array
      */
     protected $fillable = [
-        'dni', 'nombre', 'apellido', 'telefono', 'email', 'usuario', 'legajo',
+        'dni', 'nombre', 'apellido', 'telefono', 'email', 'usuario', 'legajo','rol'
     ];
 
     /**
@@ -49,6 +49,6 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      * 
      */
     public function hseq(){
-        return $this->hasOne(Hseq::class, 'idhseq');
+        return $this->hasOne(Hseq::class, 'idhseq', 'idpersona');
     }
 }

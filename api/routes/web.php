@@ -33,6 +33,7 @@ $router->group(['prefix' => 'hseq', 'middleware' => 'jwt-auth'], function () use
     $router->put('update/{id}', 'HseqController@update');
     $router->delete('delete/{id}', 'HseqController@delete');
     $router->get('search', 'HseqController@search');
+    $router->get('id', 'HseqController@getID');
 
 });
 
@@ -52,6 +53,7 @@ $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () 
     $router->post('new', 'InformeController@create');
     $router->put('update/{id}', 'InformeController@update');
     $router->delete('delete/{id}', 'InformeController@delete');
+    $router->get('me/{idhseq}', 'InformeController@informesHseq');
 
 });
 

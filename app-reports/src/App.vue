@@ -1,61 +1,121 @@
 <template>
-  <v-app>
-    <v-navigation-drawer v-model="sidebar" app>
-      <v-list>
-        <v-list-tile
-          v-for="item in menuItems"
-          :key="item.title"
-          :to="item.path">
+  <v-app id="app">
+    <!-- BARRA LATERAL DE NAVEGACIÓN -->
+    <div v-if="this.$store.state.isLogged">
+    <v-navigation-drawer v-model="drawer" clipped fixed app>
+      <!-- AVATAR -->
+      <v-toolbar flat class="transparent pl-5 mb-3">
+        <v-list>
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/3.jpg">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>Lucas Lagos</v-list-tile-title>
+              <v-list-tile-sub-title>Sujeto de prueba</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+      <!-- FIN AVATAR -->
+      <v-divider></v-divider>
+      <!-- LISTA DE OPCIONES -->
+      <v-list >
+      <v-list-tile
+        v-for="item in items"
+        :key="item.title"
+        @click=""
+        :to="item.route"
+      >
+        <v-list-tile-action>
+          <v-icon>{{ item.icon }}</v-icon>
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list dense>
+        <v-list-tile to="/logout">
           <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>cancel</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+          <v-list-tile-content>
+            <v-list-tile-title>Cerrar sesión</v-list-tile-title>
+          </v-list-tile-content>
         </v-list-tile>
       </v-list>
+      <!-- FIN LISTA DE OPCIONES -->
     </v-navigation-drawer>
+    <!-- FIN BARRA LATERAL DE NAVEGACIÓN -->
 
-    <v-toolbar app>
-      <span class="hidden-sm-and-up">
-        <v-toolbar-side-icon @click="sidebar = !sidebar">
-        </v-toolbar-side-icon>
-      </span>
+    <!-- NAVBAR TOP -->
+    <v-toolbar app fixed clipped-left color='cyan darken-1' dark>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
-        <router-link to="/" tag="span" style="cursor: pointer">
-          {{ appTitle }}
-        </router-link>
+        <v-btn icon large>
+          <v-avatar size="40px" tile>
+            <img src="./assets/logo_blanco.svg" alt="reportS">
+          </v-avatar>
+        </v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-xs-only">
-        <v-btn
-          flat
-          v-for="item in menuItems"
-          :key="item.title"
-          :to="item.path">
-          <v-icon left dark>{{ item.icon }}</v-icon>
-          {{ item.title }}
-        </v-btn>
-      </v-toolbar-items>
+      <v-btn icon>
+        <v-icon>notifications</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>settings</v-icon>
+      </v-btn>
     </v-toolbar>
-    
+    <!-- FIN NAVBAR TOP -->
+
+    <!-- CONTENIDO -->
     <v-content>
-      <router-view></router-view>
+      <v-container fluid>
+        <v-fade-transition mode="out-in">
+          <router-view></router-view>
+        </v-fade-transition>
+      </v-container>
     </v-content>
-    
+    <!-- FIN CONTENIDO -->
+
+    <!-- FOOTER -->
+    <v-footer app fixed height="auto">
+      <v-card class="flex" flat tile>
+        <v-card-actions class="justify-center">
+          <strong>Framework e Interoperabilidad</strong> — &copy;2018
+        </v-card-actions>
+      </v-card>
+    </v-footer>
+    </div>
+    <!-- FIN FOOTER -->
+    <div v-if="!this.$store.state.isLogged">
+      <h1>Logueate</h1>
+      <login></login>
+    </div>
   </v-app>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        appTitle: 'Awesome App',
-        sidebar: false,
-        menuItems: [
-          { title: 'Home', path: '/home', icon: 'home' },
-          { title: 'Sign Up', path: '/signup', icon: 'face' },
-          { title: 'Sign In', path: '/signin', icon: 'lock_open' }
+import login from './components/Login.vue'
+export default {
+  name: 'app',
+  components: {
+    login
+  },
+  data () {
+    return{
+      drawer: true,
+      items: [
+          { title: 'Inicio', icon: 'dashboard' },
+          { title: 'Usuarios', icon: 'account_box' },
+          { title: 'Informes', icon: 'list_alt', route: '/informes' }
         ]
-      }
-    }
+  }},
+  props: {
+    source: String
   }
+}
 </script>

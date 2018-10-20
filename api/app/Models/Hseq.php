@@ -31,5 +31,8 @@ class Hseq extends Model
     public function user(){
         return $this->belongsTo(User::class, 'idpersona');
     }
+    public function informe(){
+        return $this->hasMany(Informe::class, 'idinforme');
+    }
 
 }

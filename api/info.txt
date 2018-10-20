@@ -9,6 +9,7 @@
 > composer update
 > php artisan jwt:secret
 (crea una clave secreta para ser usada por los tokens)
+
 > php -S localhost:8000 -t public
 
 -----------------------------------------------------------------------------

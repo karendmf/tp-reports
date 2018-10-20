@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Hseq;
 use Illuminate\Support\Facades\Request;
+use Auth;
 
 class HseqController extends Controller
 {
@@ -23,7 +24,11 @@ class HseqController extends Controller
         $hseq = Hseq::with('cargo','user')->get();
         return response()->json($hseq);
     }
-
+    public function getID(){
+        $persona = Auth::user()->idpersona;
+        $id = Hseq::select('idhseq')->where('idpersona', $persona)->get();
+        return response()->json($id);
+    }
     public function show($id)
     {
         $hseq = Hseq::find($id);

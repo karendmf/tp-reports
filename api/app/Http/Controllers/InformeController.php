@@ -66,4 +66,8 @@ class InformeController extends Controller
         $informe->delete();
         return response()->json('Informe eliminado', 200);
     }
+    public function informesHseq($idhseq){
+        $informes = Informe::with('hseq','zona', 'estado', 'prioridad', 'adjunto')->where('idhseq', $idhseq)->get();
+        return response()->json($informes);
+    }
 }

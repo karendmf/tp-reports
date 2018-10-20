@@ -37,6 +37,9 @@ class Informe extends Model
     public function zona(){
         return $this->belongsTo(Zona::class, 'idzona');
     }
+    public function hseq(){
+        return $this->belongsTo(Hseq::class, 'idhseq');
+    }
     public function adjunto(){
         return $this->hasMany(Adjuntoinforme::class, 'idadjunto');
     }
