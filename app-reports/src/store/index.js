@@ -23,6 +23,7 @@ export const store = new Vuex.Store({
         state.isLogged = false
         state.user = null
         state.h= null
+        state.error= null
         localStorage.removeItem('token')
     }, 
     setUser (state, payload) { 
@@ -39,18 +40,14 @@ export const store = new Vuex.Store({
     } 
   }, 
   actions: {
-    /* getIDH({commit}){
-      commit('setLoading', true)
-      axios.get('http://localhost:8000/hseq/id',{ 
-        headers: { 
-          Authorization: 'Bearer ' + localStorage.getItem('token') 
-        } 
-      }). then(function (response){
-        commit('setLoading', false)
-        commit('setH', {h: response.data.idhseq})
-      })
-    }, */
-    userSignIn ({commit}, payload) { 
+
+    /**
+     * Funcíon para iniciar sesión
+     * Ejemplo para usarla: this.$store.dispatch('userSignIn', { usuario: this.usuario, password: this.password })
+     * @param {*} payload -> objeto con usuario y password
+     */
+    userSignIn ({commit}, payload) {
+      
       commit('setLoading', true) 
       axios.post('http://localhost:8000/login',{ 
           usuario: payload.usuario, 
@@ -58,10 +55,7 @@ export const store = new Vuex.Store({
       }) 
       .then(function (response) { 
         commit('setUser', {u: response.data.usuario.idpersona}) 
-        commit('setLoading', false) 
         commit('setError', null) 
-        store.commit('LOGIN_USER')
-        
         router.push('/') 
         localStorage.setItem('token', response.data.token)
         if (response.data.usuario.rol === 'admin' || response.data.usuario.rol === 'hseq'){
@@ -70,17 +64,21 @@ export const store = new Vuex.Store({
               Authorization: 'Bearer ' + localStorage.getItem('token') 
             } 
           }). then(function (response){
-            commit('setH', {h: response.data[0].idhseq})
-            console.log(response.data[0].idhseq);
+            commit('setH', response.data[0].idhseq)
+            //console.log();
           })
+        }else{
+          commit('setH', response.data.usuario.idpersona )
         }
+        store.commit('LOGIN_USER')
+        commit('setLoading', false)
         //console.log(response.data); 
       }) 
       .catch(error => { 
         commit('setError', error.message) 
         commit('setLoading', false) 
       }) 
-    } 
+    },
   },
   plugins: [createPersistedState()],
   getters: {} 

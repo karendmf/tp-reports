@@ -13,7 +13,10 @@
                     </v-card-actions> 
                 </v-card> 
             </v-flex> 
-        </v-layout> 
+        </v-layout>
+        <v-layout row wrap v-if="!informes">
+          <h1> Usted no tiene informes</h1>
+        </v-layout>
   </v-container> 
 </template> 
  
@@ -26,9 +29,10 @@ import axios from 'axios'
 export default { 
   data() { 
     return { 
-      informes: null, 
+      informes: false, 
       error: null,
       id: null,
+      alert: false
     } 
   }, 
   beforeCreate() { 
@@ -37,26 +41,26 @@ export default {
     } 
   }, 
   mounted() { 
-    this.fetchData() 
+    this.informesUser() 
   }, 
   methods: { 
-    fetchData() { 
-      var self = this 
-      self.loading = true 
-      self.error = null;
+    informesUser() {
+      this.$store.commit('setLoading', true)
+      var self = this
       self.id= store.state.h;
-      axios.get('http://localhost:8000/informe/me/'+self.id.h,{ 
+      //console.log(self.id);
+      axios.get('http://localhost:8000/informe/me/'+self.id,{ 
         headers: { 
           Authorization: 'Bearer ' + localStorage.getItem('token') 
         } 
       }) 
         .then(function (response) { 
-          self.loading = false 
           self.informes = response.data;
+          self.$store.commit('setLoading', false)
         }) 
         .catch(function (err) { 
-          self.error = err.toString() 
-          self.loading = false 
+          self.$store.commit('setError', err.message)
+          self.$store.commit('setLoading', false)
         }); 
     } 
   } 

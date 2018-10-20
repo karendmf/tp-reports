@@ -25,14 +25,15 @@ class InformeController extends Controller
 
     public function create(Request $request)
     {
+        
         $informe = new Informe;
-        $informe->idhseq = $request->idhseq;
-        $informe->idzona = $request->idzona;
-        $informe->idprioridad = $request->idprioridad;
-        $informe->idestado = $request->idestado;
-        $informe->titulo = $request->titulo;
-        $informe->descripcion = $request->descripcion;
-        $informe->fechalimite = $request->fechalimite;
+        $informe->idhseq = $request->input('idhseq');
+        $informe->idzona = $request->input('idzona');
+        $informe->idprioridad = $request->input('idprioridad');
+        $informe->idestado = $request->input('idestado');
+        $informe->titulo = $request->input('titulo');
+        $informe->descripcion = $request->input('descripcion');
+        $informe->fechalimite = $request->input('fechalimite');
 
         $informe->save();
         return response()->json($informe, 201);

@@ -41,43 +41,46 @@
 </template> 
  
 <script> 
-export default { 
-  data () { 
-    return { 
-      usuario: '', 
-      password: '', 
-      alert: false 
-    } 
+export default {
+  data() {
+    return {
+      usuario: '',
+      password: '',
+      alert: false
+    }
   },
-  beforeCreate () {
-            if (this.$store.state.isLogged) {
-                this.$router.push('/')
-            }
-        },
-  methods: { 
-    userSignIn () { 
-      this.$store.dispatch('userSignIn', { usuario: this.usuario, password: this.password }) 
-    } 
-  }, 
-  computed: { 
-    error () { 
-      return this.$store.state.error 
-    }, 
-    loading () { 
-      return this.$store.state.loading 
-    } 
-  }, 
-  watch: { 
-    error (value) { 
-      if (value) { 
-        this.alert = true 
-      } 
-    }, 
-    alert (value) { 
-      if (!value) { 
-        this.$store.commit('setError', null) 
-      } 
-    } 
-  } 
-} 
+  beforeCreate() {
+    if (this.$store.state.isLogged) {
+      this.$router.push('/')
+    }
+  },
+  methods: {
+    userSignIn() {
+      this.$store.dispatch('userSignIn', {
+        usuario: this.usuario,
+        password: this.password
+      })
+    }
+  },
+  computed: {
+    error() {
+      return this.$store.state.error
+    },
+    loading() {
+      return this.$store.state.loading
+    }
+  },
+  watch: {
+    error(value) {
+      if (value) {
+        this.alert = true
+      }
+    },
+    alert(value) {
+      if (!value) {
+        this.$store.commit('setError', null)
+      }
+    }
+  }
+}
 </script>

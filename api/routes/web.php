@@ -46,6 +46,7 @@ $router->group(['prefix' => 'cargo', 'middleware' => 'jwt-auth'], function () us
     $router->delete('delete/{id}', 'CargoController@delete');
 });
 
+
 //Informe:
 $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () use ($router) {
     $router->get('ver', 'InformeController@index');
