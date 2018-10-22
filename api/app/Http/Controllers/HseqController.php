@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Hseq;
-use Illuminate\Support\Facades\Request;
 use Auth;
+use Illuminate\Http\Request;
 
 class HseqController extends Controller
 {
@@ -36,11 +36,11 @@ class HseqController extends Controller
         $hseq->user;
         return response()->json($hseq);
     }
-    public function create(Request $request)
+    public function nuevo(Request $request)
     {
         $hseq = new Hseq;
-        $hseq->idcargo = $request->idcargo;
-        $hseq->idpersona = $request->idpersona;
+        $hseq->idcargo = $request->input('idcargo');
+        $hseq->idpersona = $request->input('idpersona');
 
         $hseq->save();
         return response()->json($hseq, 201);

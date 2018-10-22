@@ -7,6 +7,8 @@ const routerOptions = [
   { path: '/informes', component: 'Informes' },
   { path: '/logout', component: 'Logout' },
   { path: '/informes/cargar', component: 'Cargarinforme' },
+  { path: '/usuario/nuevo', component: 'Registrar' },
+  { path: '/usuario/nuevo/hseq', component: 'CargarHSEQ' },
 ] 
  
 const routes = routerOptions.map(route => { 

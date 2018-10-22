@@ -29,10 +29,22 @@ $router->group(['prefix' => 'user', 'middleware' => 'jwt-auth'], function () use
 $router->group(['prefix' => 'hseq', 'middleware' => 'jwt-auth'], function () use ($router) {
     $router->get('ver', 'HseqController@index');
     $router->get('ver/{id}', 'HseqController@show');
-    $router->post('new', 'HseqController@create');
+    $router->post('new', 'HseqController@nuevo');
     $router->put('update/{id}', 'HseqController@update');
     $router->delete('delete/{id}', 'HseqController@delete');
     $router->get('search', 'HseqController@search');
+    $router->get('id', 'HseqController@getID');
+
+});
+
+//AREA:
+$router->group(['prefix' => 'area', 'middleware' => 'jwt-auth'], function () use ($router) {
+    $router->get('ver', 'AreaController@index');
+    $router->get('ver/{id}', 'AreaController@show');
+    $router->post('new', 'AreaController@create');
+    $router->put('update/{id}', 'AreaController@update');
+    $router->delete('delete/{id}', 'AreaController@delete');
+    $router->get('search', 'AreaController@search');
     $router->get('id', 'HseqController@getID');
 
 });

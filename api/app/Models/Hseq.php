@@ -16,7 +16,7 @@ class Hseq extends Model
      * @var array
      */
     protected $fillable = [
-        'idcargo'
+        'idcargo','idpersona'
     ];
 
     /**

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
 use App\Models\Hseq;
+use App\Models\Area;
 
 class AuthController extends Controller
 {
@@ -26,7 +27,7 @@ class AuthController extends Controller
     //Listar todos los usuarios
     public function index()
     {
-        $usuarios = User::with('hseq')->get();
+        $usuarios = User::with('hseq','area')->get();
         return response()->json($usuarios);
     }
 
@@ -84,7 +85,7 @@ class AuthController extends Controller
             $user->password = Hash::make($request->input('password'));
 
             if ($user->save()) {
-                return "Nuevo usuario registrado!";
+                return $user->idpersona;
             } else {
                 return "Error al registrar usuario.";
             }

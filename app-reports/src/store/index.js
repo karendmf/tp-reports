@@ -13,9 +13,13 @@ export const store = new Vuex.Store({
     error: null,
     h: null, 
     loading: false, 
-    isLogged: false 
+    isLogged: false,
+    r:null
   }, 
-  mutations: { 
+  mutations: {
+    registrarUsuario(state, payload){
+      state.r = payload
+    },
     LOGIN_USER (state) { 
         state.isLogged = true
     }, 
