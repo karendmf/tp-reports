@@ -48,7 +48,7 @@ export default {
     getAreas() {
       var self = this;
       axios
-        .get("http://localhost:8000/area/ver", {
+        .get("/area/ver", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
           }
@@ -76,6 +76,11 @@ export default {
   mounted() {
     this.addLine();
     this.getAreas();
-  }
+  },
+  beforeCreate() { 
+        if (!this.$store.state.isLogged) { 
+        this.$router.push('/signin') 
+        } 
+    },
 };
 </script>

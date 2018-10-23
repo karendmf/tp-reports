@@ -17,6 +17,7 @@ $router->get('/', function () use ($router) {
 
 
 $router->post('login', 'AuthController@login');
+$router->get('test', 'AuthController@test');
 
 //Persona:
 $router->group(['prefix' => 'user', 'middleware' => 'jwt-auth'], function () use ($router) {
@@ -45,7 +46,7 @@ $router->group(['prefix' => 'area', 'middleware' => 'jwt-auth'], function () use
     $router->put('update/{id}', 'AreaController@update');
     $router->delete('delete/{id}', 'AreaController@delete');
     $router->get('search', 'AreaController@search');
-    $router->get('id', 'HseqController@getID');
+    $router->get('id', 'AreaController@getID');
 
 });
 

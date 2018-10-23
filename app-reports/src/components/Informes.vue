@@ -40,7 +40,7 @@ export default {
       router.push('/signin') 
     } 
   }, 
-  mounted() { 
+  created() { 
     this.informesUser() 
   }, 
   methods: { 
@@ -49,16 +49,13 @@ export default {
       var self = this
       self.id= store.state.h;
       //console.log(self.id);
-      axios.get('http://localhost:8000/informe/me/'+self.id,{ 
-        headers: { 
-          Authorization: 'Bearer ' + localStorage.getItem('token') 
-        } 
-      }) 
+      axios.get('/informe/me/'+self.id) 
         .then(function (response) { 
           self.informes = response.data;
           self.$store.commit('setLoading', false)
         }) 
-        .catch(function (err) { 
+        .catch(function (err) {
+          //console.log(err.response)
           self.$store.commit('setError', err.message)
           self.$store.commit('setLoading', false)
         }); 

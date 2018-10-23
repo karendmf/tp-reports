@@ -108,13 +108,17 @@
             ],
 
         }),
-
+        beforeCreate() { 
+            if (!this.$store.state.isLogged) { 
+            router.push('/signin') 
+            } 
+        },
         methods: {
             submit() {
                 var self = this
                 if (this.$refs.form.validate()) {
                     // Native form submission is not yet supported
-                    axios.post('http://localhost:8000/user/register', {
+                    axios.post('/user/register', {
 
                             nombre: this.nombre,
                             apellido: this.apellido,
@@ -125,26 +129,24 @@
                             usuario: this.usuario,
                             password: this.password,
                             rol: this.rol
-                        }, {
-                            headers: {
-                                Authorization: 'Bearer ' + localStorage.getItem('token')
-                            },
-                        }).then(function (response) {
-                            console.log(response)
+                        })
+                        .then(function (response) {
+                            //console.log(response)
                             self.$store.commit('registrarUsuario', response.data)
                             if (self.rol === 'hseq'){
-                                console.log('es hseq')
+                                //console.log('es hseq')
                                 router.push('/usuario/nuevo/hseq')
                             }
-                            else if(sel.rol === 'area'){
-                                console.log('es area')
+                            if(self.rol === 'area'){
+                                //console.log('es area')
+                                router.push('/usuario/nuevo/area')
                             }
                             //redirigir al informe creado
                             self.$refs.form.reset()
                         })
                         .catch(error => {
                             this.fallo = true
-                            console.log(error.response)
+                            //console.log(error.response)
                         });
                 }
             },

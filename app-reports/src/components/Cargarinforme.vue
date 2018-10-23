@@ -122,6 +122,11 @@
     components:{
       tarea
     },
+    beforeCreate() { 
+        if (!this.$store.state.isLogged) { 
+        this.$router.push('/signin') 
+        } 
+    },
     mounted(){
       this.getZonas()
       this.getPrioridad()
@@ -153,7 +158,7 @@
         var self = this
         if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
-          axios.post('http://localhost:8000/informe/new', {
+          axios.post('/informe/new', {
 
             idhseq: this.$store.state.h,
             titulo: this.titulo,

@@ -26,7 +26,7 @@ class HseqController extends Controller
     }
     public function getID(){
         $persona = Auth::user()->idpersona;
-        $id = Hseq::select('idhseq')->where('idpersona', $persona)->get();
+        $id = Hseq::where('idpersona', $persona)->with('user', 'cargo')->get();
         return response()->json($id);
     }
     public function show($id)

@@ -29,6 +29,7 @@ export const store = new Vuex.Store({
         state.h= null
         state.error= null
         localStorage.removeItem('token')
+        state.r = null
     }, 
     setUser (state, payload) { 
       state.user = payload 
@@ -53,7 +54,7 @@ export const store = new Vuex.Store({
     userSignIn ({commit}, payload) {
       
       commit('setLoading', true) 
-      axios.post('http://localhost:8000/login',{ 
+      axios.post('/login',{ 
           usuario: payload.usuario, 
           password: payload.password 
       }) 
@@ -63,7 +64,7 @@ export const store = new Vuex.Store({
         router.push('/') 
         localStorage.setItem('token', response.data.token)
         if (response.data.usuario.rol === 'admin' || response.data.usuario.rol === 'hseq'){
-          axios.get('http://localhost:8000/hseq/id',{ 
+          axios.get('/hseq/id',{ 
             headers: { 
               Authorization: 'Bearer ' + localStorage.getItem('token') 
             } 

@@ -20,7 +20,7 @@ class Area extends Model
     ];
    
     public function user(){
-        return $this->belongsTo(User::class, 'idpersona');
+        return $this->belongsTo(User::class, 'idpersona', 'idpersona');
     }
     /* public function tarea(){
         return $this->hasMany(Tarea::class, 'idtarea');

@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-layout row wrap>
             <v-flex xs12 class="text-xs-center" mt-5>
-                <h1>Registrar HSEQ</h1>
+                <h1>Registrar Área</h1>
             </v-flex>
             <v-flex xs12 sm6 offset-sm3 mt-3>
                 <v-alert v-model="fallo" dismissible color="error" icon="warning" if='error' outline>
@@ -11,13 +11,12 @@
 
                 <v-form ref="form" v-model="valid" lazy-validation>
 
-                    <v-select
-                    v-model="idcargo"
-                    label="Cargo"
-                    :items="cargos" 
-                    item-text="nombre" 
-                    item-value="idcargo"
-                    :rules="[v => !!v || 'Se requiere ingresar un cargo']"></v-select>
+                    <v-text-field
+                    v-model="nombre"
+                    :rules="nombreRules"
+                    :counter="55"
+                    label="Nombre del área"
+                    required></v-text-field>
                     <v-btn :disabled="!valid" @click="submit">
                         Enviar
                     </v-btn>
@@ -31,46 +30,24 @@
 import axios from 'axios'
 import router from '@/router'
 export default {
-    data(){
-        return{
-            cargos: [],
-            idcargo: null,
+    data:() => ({
+        
+            nombre: null,
             fallo: null,
             valid: true,
-        }
-    },
-    mounted(){
-        this.getCargos()
-    },
-    beforeCreate() { 
-        if (!this.$store.state.isLogged) { 
-        router.push('/signin') 
-        } 
-    },
+            nombreRules: [
+                v => !!v || 'Se requiere un nombre de área',
+                v => (v && v.length <= 60) || 'El nombre debe tener menos de 55 caracteres'
+            ],
+        
+    }),
     methods:{
-        getCargos(){
-        var self = this
-        axios.get('/cargo/ver',{
-          headers: { 
-            Authorization: 'Bearer ' + localStorage.getItem('token') 
-          }
-        }).then(function (response) {
-          self.cargos = response.data
-            console.log(self.cargos)
-          })
-          .catch(error => {
-              console.log(error.response)
-          });
-      },
       submit () {
         var self = this
         if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          axios.post('/hseq/new', {
-
+          axios.post('/area/new', {
             idpersona: this.$store.state.r,
-            idcargo: this.idcargo
-            
+            nombre: this.nombre
           },
           ).then(function (response) { 
             console.log(response)
@@ -90,6 +67,10 @@ export default {
         this.imageUrl= ''
       },
     },
-    
+    beforeCreate() { 
+        if (!this.$store.state.isLogged) { 
+        router.push('/signin') 
+        } 
+    },
 }
 </script>

@@ -1,43 +1,44 @@
 <template>
-  <v-app id="app">
-    <!-- BARRA LATERAL DE NAVEGACIÓN -->
-    <div v-if="this.$store.state.isLogged">
+<v-app id="app">
+  <!-- BARRA LATERAL DE NAVEGACIÓN -->
+  <div v-if="this.$store.state.isLogged">
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <!-- AVATAR -->
-      <v-toolbar flat class="transparent pl-5 mb-3">
-        <v-list>
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://randomuser.me/api/portraits/men/3.jpg">
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>Lucas Lagos</v-list-tile-title>
-              <v-list-tile-sub-title>Sujeto de prueba</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
+      <avatar></avatar>
       <!-- FIN AVATAR -->
       <v-divider></v-divider>
       <!-- LISTA DE OPCIONES -->
-      <v-list >
-      <v-list-tile
-        v-for="item in items"
-        :key="item.title"
-        @click=""
-        :to="item.route"
-      >
-        <v-list-tile-action>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-tile-action>
 
-        <v-list-tile-content>
-          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list dense>
+      <v-list>
+        <v-list-tile to="/">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Home</v-list-tile-title>
+        </v-list-tile>
+        <v-list-group v-for="item in items" v-model="item.active" :key="item.title" :prepend-icon="item.icon" no-action>
+
+          <v-list-tile slot="activator">
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile v-for="subItem in item.menu" :key="subItem.title" @click="" :to="subItem.route">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+            </v-list-tile-content>
+
+            <v-list-tile-action>
+              <v-icon>{{ subItem.icon }}</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list-group>
+      </v-list>
+
+      <v-divider></v-divider>
+      <v-list dense>
         <v-list-tile to="/logout">
           <v-list-tile-action>
             <v-icon>cancel</v-icon>
@@ -60,6 +61,7 @@
             <img src="./assets/logo_blanco.svg" alt="reportS">
           </v-avatar>
         </v-btn>
+        reportS
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -85,37 +87,70 @@
     <v-footer app fixed height="auto">
       <v-card class="flex" flat tile>
         <v-card-actions class="justify-center">
-          <strong>Framework e Interoperabilidad</strong> — &copy;2018
+          <strong>TP FINAL</strong> — &copy;2018
         </v-card-actions>
       </v-card>
     </v-footer>
-    </div>
-    <!-- FIN FOOTER -->
-    <div v-if="!this.$store.state.isLogged">
-      <h1>Logueate</h1>
-      <login></login>
-    </div>
-  </v-app>
+  </div>
+  <!-- FIN FOOTER -->
+  <div v-if="!this.$store.state.isLogged">
+    <login></login>
+  </div>
+</v-app>
 </template>
 
 <script>
-import login from './components/Login.vue'
+import login from "@/components/Login.vue";
+import avatar from "@/components/common/Avatar.vue";
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    login
+    login,
+    avatar
   },
-  data () {
-    return{
+  data() {
+    return {
       drawer: true,
-      items: [
-          { title: 'Inicio', icon: 'dashboard' },
-          { title: 'Usuarios', icon: 'account_box' },
-          { title: 'Informes', icon: 'list_alt', route: '/informes' }
-        ]
-  }},
+      items: [{
+          title: "Usuarios",
+          icon: "account_box",
+          menu: [
+            {
+              title: "Ver usuarios",
+              icon: "visibility",
+              route: "/usuario"
+            },
+            {
+              title: "Registrar usuario",
+              icon: "add",
+              route: "/usuario/nuevo"
+            },
+            
+          ]
+        },
+        {
+          title: "Informes",
+          icon: "list_alt",
+          route: "/informes",
+          menu: [
+            {
+              title: "Ver informes",
+              icon: "visibility",
+              route: "/informes"
+            },
+            {
+              title: "Crear informe",
+              icon: "add",
+              route: "/informes/cargar"
+            },
+            
+          ]
+        }
+      ]
+    };
+  },
   props: {
     source: String
   }
-}
+};
 </script>

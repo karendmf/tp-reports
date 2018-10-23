@@ -9,6 +9,7 @@ const routerOptions = [
   { path: '/informes/cargar', component: 'Cargarinforme' },
   { path: '/usuario/nuevo', component: 'Registrar' },
   { path: '/usuario/nuevo/hseq', component: 'CargarHSEQ' },
+  { path: '/usuario/nuevo/area', component: 'CargarArea' },
 ] 
  
 const routes = routerOptions.map(route => { 

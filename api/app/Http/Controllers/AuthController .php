@@ -27,7 +27,7 @@ class AuthController extends Controller
     //Listar todos los usuarios
     public function index()
     {
-        $usuarios = User::with('hseq','area')->get();
+        $usuarios = User::with('hseq','area')->has('hseq', 'area')->get();
         return response()->json($usuarios);
     }
 
@@ -97,8 +97,7 @@ class AuthController extends Controller
     //Mostrar un usuario por id
     public function show($id)
     {
-        $usuario = User::find($id);
-        $usuario->hseq;
+        $usuario = User::with('hseq','area')->has('hseq', 'area')->find($id);
         return response()->json($usuario);
     }
 
@@ -107,6 +106,7 @@ class AuthController extends Controller
     {
         $usuario=Auth::user();
         $usuario->hseq;
+        $usuario->area;
         return $usuario;
     }
 

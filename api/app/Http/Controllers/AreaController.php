@@ -26,7 +26,7 @@ class AreaController extends Controller
     }
     public function getID(){
         $persona = Auth::user()->idpersona;
-        $id = Area::select('idarea')->where('idpersona', $persona)->get();
+        $id = Area::where('idpersona', $persona)->with('user')->get();
         return response()->json($id);
     }
     public function show($id)

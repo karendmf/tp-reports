@@ -29,10 +29,11 @@ class Hseq extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class, 'idpersona');
+        return $this->belongsTo(User::class, 'idpersona', 'idpersona');
     }
+
     public function informe(){
-        return $this->hasMany(Informe::class, 'idinforme');
+        return $this->hasMany(Informe::class, 'idinforme', 'idhseq');
     }
 
 }
