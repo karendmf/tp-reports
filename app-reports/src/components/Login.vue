@@ -1,10 +1,18 @@
 <template> 
   <v-container fluid> 
-    <v-layout row wrap> 
-      <v-flex xs12 class="text-xs-center" mt-5> 
+    <v-layout row wrap>
+      
+      <v-flex xs12 class="text-xs-center" mt-5>
+        <v-avatar size="70px" color="cyan darken-1">
+            <img src="../assets/logo_blanco.svg" alt="reportS">
+        </v-avatar>
+        <br>
+        <br>
         <h1>Iniciar sesión</h1> 
+        
       </v-flex> 
       <v-flex xs12 sm6 offset-sm3 mt-3> 
+        <v-
         <form @submit.prevent="userSignIn"> 
           <v-layout column> 
             <v-flex> 
@@ -30,8 +38,8 @@
                 v-model="password" 
                 required></v-text-field> 
             </v-flex> 
-            <v-flex class="text-xs-center" mt-5> 
-              <v-btn color="primary" type="submit">Sign In</v-btn> 
+            <v-flex class="text-xs-center" mt-2> 
+              <v-btn color="cyan darken-1" type="submit" outline>Ingresar</v-btn> 
             </v-flex> 
           </v-layout> 
         </form> 

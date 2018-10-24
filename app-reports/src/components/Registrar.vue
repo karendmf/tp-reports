@@ -53,14 +53,15 @@
         data: () => ({
             fallo: false,
             valid: true,
-            rol:null,
-            
-            roles:[
-                {
-                    nombre: 'HSEQ', value: 'hseq'
+            rol: null,
+
+            roles: [{
+                    nombre: 'HSEQ',
+                    value: 'hseq'
                 },
                 {
-                    nombre: 'Area', value: 'area'
+                    nombre: 'Area',
+                    value: 'area'
                 },
             ],
             nombre: '',
@@ -73,7 +74,7 @@
             dni: '',
             dniRules: [
                 v => !!v || 'Se requiere el DNI',
-                v => (v && v.length <= 11) || 'Debe tener menos de 11 caracteres'
+                v => (v && v.length <= 8) || 'Debe tener menos de 8 caracteres'
             ],
 
 
@@ -108,10 +109,10 @@
             ],
 
         }),
-        beforeCreate() { 
-            if (!this.$store.state.isLogged) { 
-            router.push('/signin') 
-            } 
+        beforeCreate() {
+            if (!this.$store.state.isLogged) {
+                router.push('/signin')
+            }
         },
         methods: {
             submit() {
@@ -129,15 +130,19 @@
                             usuario: this.usuario,
                             password: this.password,
                             rol: this.rol
+                        }, {
+                            headers: {
+                                Authorization: 'Bearer ' + localStorage.getItem('token')
+                            }
                         })
                         .then(function (response) {
                             //console.log(response)
                             self.$store.commit('registrarUsuario', response.data)
-                            if (self.rol === 'hseq'){
+                            if (self.rol === 'hseq') {
                                 //console.log('es hseq')
                                 router.push('/usuario/nuevo/hseq')
                             }
-                            if(self.rol === 'area'){
+                            if (self.rol === 'area') {
                                 //console.log('es area')
                                 router.push('/usuario/nuevo/area')
                             }
