@@ -65,16 +65,16 @@ export default {
     .then(axios.spread((first_response, second_response) => {
           self.isarea = first_response.data
           self.ishseq = second_response.data
-          console.log(this.isarea.length,'is area')
-          console.log(this.ishseq.length,'is hseq')
+          //console.log(this.isarea.length,'is area')
+          //console.log(this.ishseq.length,'is hseq')
           if (self.ishseq.length > 0){
               self.user = self.ishseq[0]
-              console.log('hseq',self.user)
+              //console.log('hseq',self.user)
           }else{
               self.user = self.isarea[0]
-              console.log('area',self.user)
+              //console.log('area',self.user)
           }
-
+        this.$store.commit('setLoading', false)
         }))
         .catch(function (err) { 
           self.$store.commit('setError', err.message)

@@ -12,7 +12,7 @@
         
       </v-flex> 
       <v-flex xs12 sm6 offset-sm3 mt-3> 
-        <v-
+
         <form @submit.prevent="userSignIn"> 
           <v-layout column> 
             <v-flex> 

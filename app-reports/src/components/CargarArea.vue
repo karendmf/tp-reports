@@ -31,47 +31,50 @@
 import axios from 'axios'
 import router from '@/router'
 export default {
-    data:() => ({
-        
-            nombre: null,
-            fallo: null,
-            valid: true,
-            nombreRules: [
-                v => !!v || 'Se requiere un nombre de área',
-                v => (v && v.length <= 60) || 'El nombre debe tener menos de 55 caracteres'
-            ],
-        
+    data: () => ({
+
+        nombre: null,
+        fallo: null,
+        valid: true,
+        nombreRules: [
+            v => !!v || 'Se requiere un nombre de área',
+            v => (v && v.length <= 60) || 'El nombre debe tener menos de 55 caracteres'
+        ],
+
     }),
-    methods:{
-      submit () {
-        var self = this
-        if (this.$refs.form.validate()) {
-          axios.post('/area/new', {
-            idpersona: this.$store.state.r,
-            nombre: this.nombre
-          },
-          ).then(function (response) { 
-            console.log(response)
-            self.$store.commit('registrarUsuario', null)
-            //redirigir a la info del usuario cargado
-            router.push('/')
-            self.$refs.form.reset()
-          })
-          .catch(error => {
-              this.fallo = true
-              console.log(error)
-          });
-        }
-      },
-      clear () {
-        this.$refs.form.reset()
-        this.imageUrl= ''
-      },
+    methods: {
+        submit() {
+            var self = this
+            if (this.$refs.form.validate()) {
+                axios.post('/area/new', {
+                        idpersona: this.$store.state.r,
+                        nombre: this.nombre
+                    }, {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                        }
+                    }).then(function (response) {
+                        console.log(response)
+                        self.$store.commit('registrarUsuario', null)
+                        //redirigir a la info del usuario cargado
+                        router.push('/')
+                        self.$refs.form.reset()
+                    })
+                    .catch(error => {
+                        this.fallo = true
+                        console.log(error)
+                    });
+            }
+        },
+        clear() {
+            this.$refs.form.reset()
+            this.imageUrl = ''
+        },
     },
-    beforeCreate() { 
-        if (!this.$store.state.isLogged) { 
-        router.push('/signin') 
-        } 
+    beforeCreate() {
+        if (!this.$store.state.isLogged) {
+            router.push('/signin')
+        }
     },
 }
 </script>

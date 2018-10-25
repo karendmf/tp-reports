@@ -21,46 +21,48 @@
 </template> 
  
 <script> 
-import router from '@/router' 
-import { 
-  store 
-} from '@/store' 
-import axios from 'axios' 
-export default { 
-  data() { 
-    return { 
-      informes: false, 
+import router from '@/router'
+import { store } from '@/store'
+import axios from 'axios'
+export default {
+  data() {
+    return {
+      informes: false,
       error: null,
       id: null,
       alert: false
-    } 
-  }, 
-  beforeCreate() { 
-    if (!store.state.isLogged) { 
-      router.push('/signin') 
-    } 
-  }, 
-  created() { 
-    this.informesUser() 
-  }, 
-  methods: { 
+    }
+  },
+  beforeCreate() {
+    if (!store.state.isLogged) {
+      router.push('/signin')
+    }
+  },
+  created() {
+    this.informesUser()
+  },
+  methods: {
     informesUser() {
       this.$store.commit('setLoading', true)
       var self = this
-      self.id= store.state.h;
+      self.id = store.state.h;
       //console.log(self.id);
-      axios.get('/informe/me/'+self.id) 
-        .then(function (response) { 
+      axios.get('/informe/me/' + self.id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(function (response) {
           self.informes = response.data;
           self.$store.commit('setLoading', false)
-        }) 
+        })
         .catch(function (err) {
           //console.log(err.response)
           self.$store.commit('setError', err.message)
           self.$store.commit('setLoading', false)
-        }); 
-    } 
-  } 
- 
-} 
+        });
+    }
+  }
+
+}
 </script>

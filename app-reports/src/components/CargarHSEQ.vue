@@ -31,65 +31,68 @@
 import axios from 'axios'
 import router from '@/router'
 export default {
-    data(){
-        return{
+    data() {
+        return {
             cargos: [],
             idcargo: null,
             fallo: null,
             valid: true,
         }
     },
-    mounted(){
+    mounted() {
         this.getCargos()
     },
-    beforeCreate() { 
-        if (!this.$store.state.isLogged) { 
-        router.push('/signin') 
-        } 
-    },
-    methods:{
-        getCargos(){
-        var self = this
-        axios.get('/cargo/ver',{
-          headers: { 
-            Authorization: 'Bearer ' + localStorage.getItem('token') 
-          }
-        }).then(function (response) {
-          self.cargos = response.data
-            console.log(self.cargos)
-          })
-          .catch(error => {
-              console.log(error.response)
-          });
-      },
-      submit () {
-        var self = this
-        if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          axios.post('/hseq/new', {
-
-            idpersona: this.$store.state.r,
-            idcargo: this.idcargo
-            
-          },
-          ).then(function (response) { 
-            console.log(response)
-            self.$store.commit('registrarUsuario', null)
-            //redirigir a la info del usuario cargado
-            router.push('/')
-            self.$refs.form.reset()
-          })
-          .catch(error => {
-              this.fallo = true
-              console.log(error)
-          });
+    beforeCreate() {
+        if (!this.$store.state.isLogged) {
+            router.push('/signin')
         }
-      },
-      clear () {
-        this.$refs.form.reset()
-        this.imageUrl= ''
-      },
     },
-    
+    methods: {
+        getCargos() {
+            var self = this
+            axios.get('/cargo/ver', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                }).then(function (response) {
+                    self.cargos = response.data
+                    console.log(self.cargos)
+                })
+                .catch(error => {
+                    console.log(error.response)
+                });
+        },
+        submit() {
+            var self = this
+            if (this.$refs.form.validate()) {
+                // Native form submission is not yet supported
+                axios.post('/hseq/new', {
+
+                        idpersona: this.$store.state.r,
+                        idcargo: this.idcargo
+
+                    }, {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                        }
+                    }).then(function (response) {
+                        console.log(response)
+                        self.$store.commit('registrarUsuario', null)
+                        //redirigir a la info del usuario cargado
+                        router.push('/')
+                        self.$refs.form.reset()
+                    })
+                    .catch(error => {
+                        this.fallo = true
+                        console.log(error.response)
+                    });
+            }
+        },
+        clear() {
+            this.$refs.form.reset()
+            this.imageUrl = ''
+        },
+    },
+
 }
 </script>

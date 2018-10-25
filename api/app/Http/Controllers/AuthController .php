@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\HseqController;
+use App\Models\Area;
+use App\Models\Hseq;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
-use App\Models\Hseq;
-use App\Models\Area;
 
 class AuthController extends Controller
 {
@@ -27,7 +26,7 @@ class AuthController extends Controller
     //Listar todos los usuarios
     public function index()
     {
-        $usuarios = User::with('hseq','area')->has('hseq', 'area')->get();
+        $usuarios = User::with('hseq', 'area')->has('hseq', 'area')->get();
         return response()->json($usuarios);
     }
 
@@ -60,10 +59,10 @@ class AuthController extends Controller
         }
 
         $response = compact('token');
-        $id=Auth::user()->idpersona;
+        $id = Auth::user()->idpersona;
         $user = Hseq::with('user')->where('idpersona', $id)->get();
-        if (count($user) == 0){
-            $user=Auth::user();
+        if (count($user) == 0) {
+            $user = Auth::user();
         }
         $response['usuario'] = Auth::user();
         return response()->json($response);
@@ -73,6 +72,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         if ($request->has('usuario') && $request->has('password') && $request->has('dni') && $request->has('nombre') && $request->has('apellido') && $request->has('legajo')) {
+
             $user = new User;
             $user->usuario = $request->input('usuario');
             $user->dni = $request->input('dni');
@@ -84,27 +84,44 @@ class AuthController extends Controller
             $user->rol = $request->input('rol');
             $user->password = Hash::make($request->input('password'));
 
-            if ($user->save()) {
-                return $user->idpersona;
+            if (User::where('dni', '=', $request->input('dni'))->exists()) {
+                return response()->json("¡El DNI ingresado ya existe!", 409);
+                
+            } else if (User::where('usuario', '=', $request->input('usuario'))->exists()) {
+                return response()->json("¡El nombre de usuario ingresado ya existe!", 409);
+
+            } else if (User::where('legajo', '=', $request->input('legajo'))->exists()) {
+                return response()->json("¡El legajo ingresado ya existe!", 409);
+
+            } else if (User::where('email', '=', $request->input('email'))->exists()) {
+                return response()->json("¡El email ingresado ya existe!", 409);
+
+            } else if (User::where('telefono', '=', $request->input('telefono'))->exists()) {
+                return response()->json("¡El teléfono ingresado ya existe!", 409);
+
             } else {
-                return "Error al registrar usuario.";
+                if ($user->save()) {
+                    return response()->json($user->idpersona, 201);
+                } else {
+                    return response()->json("Error al registrar usuario.", 400);
+                }
             }
         } else {
-            return "Falta información para registrar a un nuevo usuario!";
+            return response()->json("Falta información para registrar a un nuevo usuario!", 422);
         }
     }
 
     //Mostrar un usuario por id
     public function show($id)
     {
-        $usuario = User::with('hseq','area')->has('hseq', 'area')->find($id);
+        $usuario = User::with('hseq', 'area')->has('hseq', 'area')->find($id);
         return response()->json($usuario);
     }
 
     //Funcion test
     public function test()
     {
-        $usuario=Auth::user();
+        $usuario = Auth::user();
         $usuario->hseq;
         $usuario->area;
         return $usuario;

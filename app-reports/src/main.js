@@ -11,7 +11,7 @@ Vue.use(Vuetify)
 
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+//axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 new Vue({
   el: '#app',
   store,

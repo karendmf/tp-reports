@@ -55,8 +55,7 @@ export default {
   methods: {
     getAreas() {
       var self = this;
-      axios
-        .get("/area/ver", {
+      axios.get("/area/ver", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
           }
