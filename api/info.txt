@@ -15,15 +15,6 @@
 -----------------------------------------------------------------------------
 
 
-Se modifico el modelo por defecto "app/Models/User.php"
-
-Se implementa la libreria "tymon/jwt-auth", para la autenticación por tokens.
-
-Se crea el controlador "app/Http/Controllers/AuthController.php"
-
-> funcion "login"
-> funcion "register"
-
 
 
  /* $hseq = DB::table('hseq')

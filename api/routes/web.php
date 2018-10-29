@@ -71,6 +71,15 @@ $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () 
 
 });
 
+//Imagenes de informe:
+    $router->group(['prefix' => 'informe/img', 'middleware' => 'jwt-auth'], function () use ($router) {
+        $router->get('ver', 'AdjuntoinformeController@index');
+        $router->get('ver/{id}', 'AdjuntoinformeController@show');
+        $router->post('new', 'AdjuntoinformeController@create');
+        $router->put('update/{id}', 'AdjuntoinformeController@update');
+        $router->delete('delete/{id}', 'AdjuntoinformeController@delete');
+    });
+
 //Estado
 $router->group(['prefix' => 'estado', 'middleware' => 'jwt-auth'], function () use ($router) {
     $router->get('ver', 'EstadoController@index');

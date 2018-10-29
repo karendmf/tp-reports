@@ -4,7 +4,7 @@
         <v-flex xs5 sm3>
             <v-select
             v-model="line.idarea"
-            label="Area involucrada"
+            label="Área involucrada"
             :items="areas" 
             item-text="nombre" 
             item-value="idarea"/>
@@ -17,20 +17,17 @@
             required></v-text-field>
         </v-flex>
         <v-flex xs12 sm3>
-          <v-tooltip bottom>
             <v-btn slot="activator"
-            v-if="index + 1 === lines.length" @click="addLine" fab dark small color="cyan darken-1">
+            v-if="index + 1 === lines.length" @click="addLine" fab dark small color="cyan darken-1" outline>
                 <v-icon>add</v-icon>
             </v-btn>
-            <span>Agregar otra tarea</span>
-          </v-tooltip>
-          <v-tooltip bottom>
+            
+          
             <v-btn slot="activator"
-            @click="removeLine(index)" fab dark small color="red">
+            @click="removeLine(index)" fab dark small color="red" outline>
                 <v-icon>close</v-icon>
             </v-btn>
-            <span>Eliminar tarea</span>
-          </v-tooltip>
+          
         </v-flex>
     </v-layout>
 </v-container>
@@ -62,7 +59,7 @@ export default {
         })
         .then(function(response) {
           self.areas = response.data;
-          console.log(self.areas);
+          //console.log(self.areas);
         })
         .catch(error => {
           console.log(error.response);

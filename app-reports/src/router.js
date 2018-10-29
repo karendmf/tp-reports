@@ -6,10 +6,10 @@ const routerOptions = [
   { path: '/login', component: 'Login' },
   { path: '/informes', component: 'Informes' },
   { path: '/logout', component: 'Logout' },
-  { path: '/informes/cargar', component: 'Cargarinforme' },
-  { path: '/usuario/nuevo', component: 'Registrar' },
+  { path: '/informes/cargar', component: 'CargarInforme' },
+  { path: '/usuario/nuevo', component: 'RegistrarUser' },
   { path: '/usuario/nuevo/hseq', component: 'CargarHSEQ' },
-  { path: '/usuario/nuevo/area', component: 'CargarArea' },
+  { path: '/usuario/nuevo/area', component: 'CargarArea' }
 ] 
  
 const routes = routerOptions.map(route => { 

@@ -26,13 +26,19 @@ class AdjuntoinformeController extends Controller
     public function create(Request $request)
     {
         $adjuntoinforme = new Adjuntoinforme;
-        $adjuntoinforme->idadjunto = $request->idadjunto;
-        $adjuntoinforme->idinforme = $request->idinforme;
-        $adjuntoinforme->url = $request->url;
-        $adjuntoinforme->descripcion = $request->descripcion;
+        if ($request->hasFile('image')){
+            $url = 'img/ad_inf/';
+            $image = $request->file('image');
+            $ext = $image->extension();
+            $nombre = time().'_'.rand(10, 300).'.'.$ext;
+            $adjuntoinforme->idinforme = $request->idinforme;
+            $adjuntoinforme->url = $url.$nombre;
+            $adjuntoinforme->descripcion = $request->descripcion;
 
-        $adjuntoinforme->save();
-        return response()->json($adjuntoinforme, 201);
+            $adjuntoinforme->save();
+            $request->file('image')->move($url, $nombre);
+            return response()->json($adjuntoinforme, 201);
+        }
     }
 
     public function show($id)
