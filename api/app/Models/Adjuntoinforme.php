@@ -16,7 +16,7 @@ class Adjuntoinforme extends Model
      * @var array
      */
     protected $fillable = [
-        'idadjunto', 'idinforme', 'url', 'descripcion',
+        'idadjunto', 'idinforme', 'url'
     ];
 
     /**

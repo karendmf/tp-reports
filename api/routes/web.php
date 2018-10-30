@@ -68,17 +68,25 @@ $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () 
     $router->put('update/{id}', 'InformeController@update');
     $router->delete('delete/{id}', 'InformeController@delete');
     $router->get('me/{idhseq}', 'InformeController@informesHseq');
-
 });
 
 //Imagenes de informe:
-    $router->group(['prefix' => 'informe/img', 'middleware' => 'jwt-auth'], function () use ($router) {
-        $router->get('ver', 'AdjuntoinformeController@index');
-        $router->get('ver/{id}', 'AdjuntoinformeController@show');
-        $router->post('new', 'AdjuntoinformeController@create');
-        $router->put('update/{id}', 'AdjuntoinformeController@update');
-        $router->delete('delete/{id}', 'AdjuntoinformeController@delete');
-    });
+$router->group(['prefix' => 'informe/img', 'middleware' => 'jwt-auth'], function () use ($router) {
+    $router->get('ver', 'AdjuntoinformeController@index');
+    $router->get('ver/{id}', 'AdjuntoinformeController@show');
+    $router->post('new', 'AdjuntoinformeController@create');
+    $router->put('update/{id}', 'AdjuntoinformeController@update');
+    $router->delete('delete/{id}', 'AdjuntoinformeController@delete');
+});
+
+//Tarea:
+$router->group(['prefix' => 'tarea', 'middleware' => 'jwt-auth'], function () use ($router) {
+    $router->get('ver', 'TareaController@index');
+    $router->get('ver/{id}', 'TareaController@show');
+    $router->post('new', 'TareaController@create');
+    $router->put('update/{id}', 'TareaController@update');
+    $router->delete('delete/{id}', 'TareaController@delete');
+});
 
 //Estado
 $router->group(['prefix' => 'estado', 'middleware' => 'jwt-auth'], function () use ($router) {

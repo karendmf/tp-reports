@@ -28,12 +28,18 @@
 
           <br>
           <!-- Descripción -->
+          
           <label>Descripción</label>
           <v-container>
             <vue-editor v-model="descripcion" :editorToolbar='customToolbar' :rules='textareaRules'></vue-editor>
           </v-container>
           <br>
-
+          <!-- Imagenes-->
+          <label>Agregar imágenes</label>
+          <v-container>
+          <vue-dropzone ref="dropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-sending="sendingEvent">
+          </vue-dropzone>
+          </v-container>
           <!-- Select Zonas -->
           <v-select :items="zonas" v-model="idzona" label="Zona" :rules="[v => !!v || 'Se requiere ingresar la zona']"
             item-text="nombre" item-value="idzona"></v-select>
@@ -41,14 +47,10 @@
           <!-- Select Prioridad -->
           <v-select v-model="idprioridad" :items="prioridad" :rules="[v => !!v || 'Se requiere ingresar la prioridad']"
             label="Prioridad" item-text="nombre" item-value="idprioridad" required></v-select>
-            
-          <!-- Imagenes -->
-          <img :src="imageUrl" height="150" v-if="imageUrl" />
-          <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
-          <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked">
-
+          <br>
           <!-- Tareas -->
-          <tarea></tarea>
+          <label>Tareas</label>
+          <tarea ref="tarea"></tarea>
 
           <!-- Botones -->
           <v-btn :disabled="!valid" @click="submit" outline color="cyan darken-1">
