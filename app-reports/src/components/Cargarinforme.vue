@@ -18,8 +18,8 @@
 
           <!-- Fecha -->
           <v-dialog ref="dialog" v-model="fechalimite" :return-value.sync="date" persistent lazy full-width width="290px">
-            <v-text-field slot="activator" v-model="date" label="Seleccione Fecha Limite" :rules="dateRules" required></v-text-field>
-            <v-date-picker v-model="date" scrollable>
+            <v-text-field slot="activator" v-model="date" label="Seleccione la fecha limite" :rules="dateRules" required></v-text-field>
+            <v-date-picker v-model="date" scrollable locale="es-mx">
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="fechalimite = false">Cancelar</v-btn>
               <v-btn flat color="primary" @click="$refs.dialog.save(date)">Ingresar</v-btn>

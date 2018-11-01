@@ -10,6 +10,8 @@ const routerOptions = [
   { path: '/usuario/nuevo', component: 'RegistrarUser' },
   { path: '/usuario/nuevo/hseq', component: 'CargarHSEQ' },
   { path: '/usuario/nuevo/area', component: 'CargarArea' },
+  { path: '/solicitar', component: 'SolicitarUsuario' },
+  { path: '/img', component: 'uploadImg' },
 ] 
  
 const routes = routerOptions.map(route => { 
