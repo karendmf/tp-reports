@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar flat class="transparent pl-5 mb-3">
+    <v-toolbar flat class="transparent pl-5 my-3">
         <v-list>
 
           <v-list-tile avatar v-if="user && typeof user.cargo !== 'undefined'">

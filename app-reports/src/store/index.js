@@ -11,7 +11,8 @@ export const store = new Vuex.Store({
   state: { 
     user: null, 
     error: null,
-    h: null, 
+    h: null,
+    a: null,
     loading: false, 
     isLogged: false,
     r:null
@@ -27,6 +28,7 @@ export const store = new Vuex.Store({
         state.isLogged = false
         state.user = null
         state.h= null
+        state.a= null
         state.error= null
         localStorage.removeItem('token')
         state.r = null
@@ -36,6 +38,9 @@ export const store = new Vuex.Store({
     }, 
     setH (state, payload) { 
       state.h = payload 
+    },
+    setA (state, payload) { 
+      state.a = payload 
     }, 
     setError (state, payload) { 
       state.error = payload 
@@ -59,21 +64,15 @@ export const store = new Vuex.Store({
           password: payload.password 
       }) 
       .then(function (response) { 
-        commit('setUser', {u: response.data.usuario.idpersona}) 
+        commit('setUser', response.data.usuario.idpersona) 
         commit('setError', null) 
         router.push('/') 
         localStorage.setItem('token', response.data.token)
         if (response.data.usuario.rol === 'admin' || response.data.usuario.rol === 'hseq'){
-          axios.get('/hseq/id',{ 
-            headers: { 
-              Authorization: 'Bearer ' + localStorage.getItem('token') 
-            } 
-          }). then(function (response){
-            commit('setH', response.data[0].idhseq)
+            commit('setH', response.data.usuario.hseq.idhseq)
             //console.log();
-          })
         }else{
-          commit('setH', response.data.usuario.idpersona )
+          commit('setA', response.data.usuario.area.idarea )
         }
         store.commit('LOGIN_USER')
         commit('setLoading', false)

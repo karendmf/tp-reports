@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid>
-    <v-layout row wrap>
+  <v-container fluid class="white">
+    <v-layout row wrap >
       <v-flex xs12 class="text-xs-center" mt-5>
         <h1>Cargar Informe</h1>
       </v-flex>
@@ -17,18 +17,14 @@
           <v-text-field v-model="titulo" :rules="tituloRules" :counter="60" label="Título" required></v-text-field>
 
           <!-- Fecha -->
-          <v-dialog ref="dialog" v-model="fechalimite" :return-value.sync="date" persistent lazy full-width width="290px">
-            <v-text-field slot="activator" v-model="date" label="Seleccione la fecha limite" :rules="dateRules" required></v-text-field>
-            <v-date-picker v-model="date" scrollable locale="es-mx">
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="fechalimite = false">Cancelar</v-btn>
-              <v-btn flat color="primary" @click="$refs.dialog.save(date)">Ingresar</v-btn>
-            </v-date-picker>
-          </v-dialog>
-
+          <v-menu :close-on-content-click="true" v-model="fechalimite" :nudge-right="40" lazy transition="scale-transition"
+            offset-y full-width min-width="290px">
+            <v-text-field clearable :rules="dateRules" slot="activator" label="Seleccione la fecha límite" prepend-icon="event" readonly :value="formato"></v-text-field>
+            <v-date-picker v-model="date" @input="fechalimite = false" locale="es-mx" color="cyan lighten-3" :min='moment(new Date()).format("YYYY-MM-DD")'></v-date-picker>
+          </v-menu>
           <br>
           <!-- Descripción -->
-          
+
           <label>Descripción</label>
           <v-container>
             <vue-editor v-model="descripcion" :editorToolbar='customToolbar' :rules='textareaRules'></vue-editor>
@@ -37,8 +33,8 @@
           <!-- Imagenes-->
           <label>Agregar imágenes</label>
           <v-container>
-          <vue-dropzone ref="dropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-sending="sendingEvent">
-          </vue-dropzone>
+            <vue-dropzone ref="dropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-sending="sendingEvent">
+            </vue-dropzone>
           </v-container>
           <!-- Select Zonas -->
           <v-select :items="zonas" v-model="idzona" label="Zona" :rules="[v => !!v || 'Se requiere ingresar la zona']"

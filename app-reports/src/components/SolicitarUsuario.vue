@@ -1,7 +1,7 @@
 <template>
   <v-flex xs12 text-xs-center pa-3 ma-3>
     <h1>Solicitar Usuario</h1>
-    <v-alert type="error" dismissible v-model="alert" outline>
+    <v-alert type="error" dismissible v-model="alert" outline transition="scale-transition">
       {{ error }}
     </v-alert>
     <v-form ref="form" v-model="valid">
@@ -20,7 +20,7 @@ export default {
   data: () => ({
     alert: false,
     valid: true,
-    
+
     nombre: "",
     apellido: "",
     namesurname: [
@@ -43,18 +43,17 @@ export default {
 
   methods: {
     submit() {
-      var self= this
+      var self = this
       if (this.$refs.form.validate()) {
         axios.post(
-            "/solicitudes/new",
-            {
+            "/solicitud/new", {
               nombre: this.nombre,
               apellido: this.apellido,
               legajo: this.legajo,
               email: this.email
             }
           )
-          .then(function(response) {
+          .then(function (response) {
             console.log(response);
             self.$store.commit("setError", null);
             if (response.status === 201) {
@@ -71,15 +70,16 @@ export default {
     },
   },
   computed: {
-            error() {
-                return this.$store.state.error
-            },
-            loading() {
-                return this.$store.state.loading
-            }
-        },
+    error() {
+      return this.$store.state.error
+    },
+    loading() {
+      return this.$store.state.loading
+    }
+  },
   watch: {
     error(value) {
+      this.alert = false;
       if (value) {
         this.alert = true;
       }
@@ -88,6 +88,7 @@ export default {
       if (!value) {
         this.$store.commit("setError", null);
       }
+
     }
   }
 };

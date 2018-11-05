@@ -19,7 +19,7 @@
             auto-grow
             v-model="line.descripcion" 
             label="Descripción de tarea" 
-            hint="Especifique con detalles, que debe hacer el area seleccionada"
+            hint="Especifique con detalles, que debe hacer el área seleccionada"
             required></v-textarea>
         </v-flex>
         <v-flex xs6 sm6>

@@ -1,10 +1,10 @@
 <template>
-    <v-container fluid>
+    <v-container fluid class="white" text-xs-center>
         <v-layout row wrap>
             <v-flex xs12 class="text-xs-center" mt-5>
                 <h1>Registrar Usuario</h1>
             </v-flex>
-            <v-flex xs12 sm6 offset-sm3 mt-3>
+            <v-flex xs12 sm8 offset-sm2 mt-3 >
                 <v-alert type="error" dismissible v-model="alert" outline> 
                     {{ error }} 
                 </v-alert>

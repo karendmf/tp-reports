@@ -41,6 +41,9 @@ class Informe extends Model
         return $this->belongsTo(Hseq::class, 'idhseq');
     }
     public function adjunto(){
-        return $this->hasMany(Adjuntoinforme::class, 'idadjunto');
+        return $this->hasMany(Adjuntoinforme::class, 'idinforme');
+    }
+    public function tarea(){
+        return $this->hasMany(Tarea::class, 'idinforme');
     }
 }

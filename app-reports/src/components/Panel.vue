@@ -109,12 +109,12 @@ export default {
           icon: "account_box",
           menu: [
             {
-              title: "Ver usuarios",
+              title: "Ver Usuarios",
               icon: "visibility",
               route: "/usuario"
             },
             {
-              title: "Registrar usuario",
+              title: "Registrar Usuario",
               icon: "add",
               route: "/usuario/nuevo"
             },
@@ -124,18 +124,30 @@ export default {
         {
           title: "Informes",
           icon: "list_alt",
-          route: "/informes",
           menu: [
             {
-              title: "Ver informes",
+              title: "Ver Informes",
               icon: "visibility",
               route: "/informes"
             },
             {
-              title: "Crear informe",
+              title: "Crear Informe",
               icon: "add",
               route: "/informes/cargar"
             },
+            
+          ]
+        },
+        {
+          title: "Tareas",
+          icon: "list_alt",
+          menu: [
+            {
+              title: "Ver Tareas",
+              icon: "visibility",
+              route: "/tareas"
+            },
+            
             
           ]
         }

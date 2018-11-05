@@ -5,13 +5,14 @@ const routerOptions = [
   { path: '/', component: 'Landing' }, 
   { path: '/login', component: 'Login' },
   { path: '/informes', component: 'Informes' },
+  { path: '/tareas', component: 'Tareas' },
   { path: '/logout', component: 'Logout' },
   { path: '/informes/cargar', component: 'CargarInforme' },
   { path: '/usuario/nuevo', component: 'RegistrarUser' },
   { path: '/usuario/nuevo/hseq', component: 'CargarHSEQ' },
   { path: '/usuario/nuevo/area', component: 'CargarArea' },
   { path: '/solicitar', component: 'SolicitarUsuario' },
-  { path: '/img', component: 'uploadImg' },
+  { path: '/informes/:idInforme/ver', component: 'VerInforme', props: true },
 ] 
  
 const routes = routerOptions.map(route => { 

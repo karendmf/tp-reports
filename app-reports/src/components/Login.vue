@@ -46,6 +46,7 @@ export default {
       usuario: '',
       password: '',
       alert: false
+      
     }
   },
   beforeCreate() {
@@ -71,6 +72,7 @@ export default {
   },
   watch: {
     error(value) {
+      this.alert = false;
       if (value) {
         this.alert = true
       }

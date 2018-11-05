@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 
 $router->post('login', 'AuthController@login');
 $router->get('test', 'AuthController@test');
-$router->post('solicitudes/new', 'SolicitudesController@create');
+$router->post('solicitud/new', 'SolicitudController@create');
 
 //Persona:
 $router->group(['prefix' => 'user', 'middleware' => 'jwt-auth'], function () use ($router) {
@@ -93,6 +93,7 @@ $router->group(['prefix' => 'tarea', 'middleware' => 'jwt-auth'], function () us
     $router->post('new', 'TareaController@create');
     $router->put('update/{id}', 'TareaController@update');
     $router->delete('delete/{id}', 'TareaController@delete');
+    $router->get('me/{idarea}', 'TareaController@tareasArea');
 });
 
 //Estado

@@ -1,13 +1,15 @@
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import moment from 'moment';
 import {
   VueEditor
 } from "vue2-editor";
 import axios from "axios";
-import tarea from "../Tarea.vue";
+import tarea from "./Tarea.vue";
 export default {
   data: () => ({
-    self: this,
+    moment: moment,
+    date: new Date().toISOString().substr(0, 10),
     customToolbar: [
       ["bold", "italic", "underline", "strike"],
       [{
@@ -58,7 +60,6 @@ export default {
       (v && v.length <= 60) || "El título debe tener menos de 60 caracteres"
     ],
 
-    date: null,
     fechalimite: false,
     dateRules: [v => !!v || "Se requiere una fecha limite"],
 
@@ -76,7 +77,7 @@ export default {
       acceptedFiles: 'image/*',
       dictDefaultMessage: '<h2>Arrastre las imágenes aquí</h2><h4>O haga click para seleccionar desde una carpeta</h4>',
       dictRemoveFile: 'Descartar',
-      dictMaxFilesExceeded:'Solo se pueden adjuntar 4 imágenes',
+      dictMaxFilesExceeded: 'Solo se pueden adjuntar 4 imágenes',
       dictFileTooBig: 'El archivo es muy grande. {{maxFilesize}}MB Max',
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -92,6 +93,7 @@ export default {
     vueDropzone: vue2Dropzone
   },
   beforeCreate() {
+    moment.locale('es')
     if (!this.$store.state.isLogged) {
       this.$router.push("/signin");
     }
@@ -101,7 +103,10 @@ export default {
     this.getPrioridad();
   },
   methods: {
-
+    /* selectableDays (date) {
+      const today = new Date('2018-11-03')
+      return date >= today && date.getDay() === 1
+    }, */
     submit() {
       var self = this;
       if (this.$refs.form.validate()) {
@@ -176,5 +181,10 @@ export default {
         });
     }
   },
+  computed: {
+    formato () {
+      return this.date ? moment(this.date).format('ddd D MMM YYYY') : ''
+    }
+  }
 
 };

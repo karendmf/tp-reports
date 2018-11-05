@@ -59,12 +59,10 @@ class AuthController extends Controller
         }
 
         $response = compact('token');
-        $id = Auth::user()->idpersona;
-        $user = Hseq::with('user')->where('idpersona', $id)->get();
-        if (count($user) == 0) {
-            $user = Auth::user();
-        }
-        $response['usuario'] = Auth::user();
+        $usuario = Auth::user();
+        $usuario->hseq;
+        $usuario->area;
+        $response['usuario'] = $usuario;
         return response()->json($response);
     }
 
@@ -114,7 +112,11 @@ class AuthController extends Controller
     //Mostrar un usuario por id
     public function show($id)
     {
-        $usuario = User::with('hseq', 'area')->has('hseq', 'area')->find($id);
+        //$usuario = User::with('hseq', 'area')->has('hseq', 'area')->find($id);
+        $usuario = User::find($id);
+        $usuario->hseq->cargo;
+        $usuario->area;
+        
         return response()->json($usuario);
     }
 

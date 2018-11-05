@@ -19,7 +19,7 @@ class InformeController extends Controller
 
     public function index()
     {
-        $informes = Informe::with('zona', 'estado', 'prioridad', 'adjunto')->get();
+        $informes = Informe::with('zona', 'estado', 'prioridad', 'adjunto','tarea')->get();
         return response()->json($informes);
     }
 
@@ -41,12 +41,17 @@ class InformeController extends Controller
 
     public function show($id)
     {
-        $informe = Informe::find($id);
-        $informe->estado;
-        $informe->prioridad;
-        $informe->zona;
-        $informe->adjunto;
-        return response()->json($informe);
+        if($informe = Informe::find($id)){
+            $informe->estado;
+            $informe->prioridad;
+            $informe->zona;
+            $informe->adjunto;
+            $informe->hseq->user;
+            $informe->tarea->each->area;
+            return response()->json($informe);
+        }else{
+            return response()->json('El informe no existe', 404);
+        }
     }
 
     public function update(Request $request, $id)

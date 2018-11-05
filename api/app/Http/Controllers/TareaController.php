@@ -9,13 +9,14 @@ class TareaController extends Controller
 {
     public function index()
     {
-        $tarea = Tarea::all();
+        $tarea = Tarea::with('area')->get();
         return response()->json($tarea);
     }
 
     public function show($id)
     {
         $tarea = Tarea::find($id);
+        $tarea->area;
         return response()->json($tarea);
     }
     public function create(Request $request)
@@ -45,5 +46,9 @@ class TareaController extends Controller
         $tarea = Tarea::find($id);
         $tarea->delete();
         return response()->json('tarea eliminada', 200);
+    }
+    public function tareasArea($idarea){
+        $tareas = Tarea::with('informe')->where('idarea', $idarea)->get();
+        return response()->json($tareas);
     }
 }

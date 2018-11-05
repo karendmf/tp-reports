@@ -44,9 +44,9 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     }
 
     public function hseq(){
-        return $this->hasMany(Hseq::class, 'idhseq', 'idpersona');
+        return $this->hasOne(Hseq::class, 'idpersona');
     }
     public function area(){
-        return $this->hasMany(Area::class, 'idarea', 'idpersona');
+        return $this->hasOne(Area::class, 'idpersona');
     }
 }
