@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar flat class="transparent pl-5 my-3">
+    <v-toolbar flat class="transparent  my-3">
         <v-list>
 
           <v-list-tile avatar v-if="user && typeof user.cargo !== 'undefined'">
@@ -9,6 +9,7 @@
             <v-list-tile-content>
               <v-list-tile-title>{{user.user.nombre}} {{user.user.apellido}}</v-list-tile-title>
               <v-list-tile-sub-title>{{user.cargo.nombre}}</v-list-tile-sub-title>
+              
             </v-list-tile-content>
           </v-list-tile>
 
@@ -35,7 +36,11 @@ export default {
       isarea: null,
     } 
   },
-  
+  /* beforeCreate() {
+    if (!this.$store.state.isLogged) {
+      this.$router.push('/signin')
+    }
+  }, */
   created() { 
     this.usuario() 
   }, 
@@ -77,7 +82,12 @@ export default {
         this.$store.commit('setLoading', false)
         }))
         .catch(function (err) { 
+          if (err.response.status === 401){
+            self.$store.commit('setExpired', true)
+            self.$router.push('/logout')
+          }else{
           self.$store.commit('setError', err.message)
+          }
           self.$store.commit('setLoading', false)
         }); 
     } 

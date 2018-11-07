@@ -2,22 +2,21 @@
   <div>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <!-- AVATAR -->
-      <avatar></avatar>
+      <avatar ></avatar>
       <!-- FIN AVATAR -->
       <v-divider></v-divider>
       <!-- LISTA DE OPCIONES -->
 
-      <v-list>
+      <v-list> 
         <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title>Home</v-list-tile-title>
+          <v-list-tile-title>Inicio</v-list-tile-title>
         </v-list-tile>
-        <v-list-group v-for="item in items" v-model="item.active" :key="item.title" :prepend-icon="item.icon" no-action>
+        <v-list-group v-for="item in items" v-model="item.active" :key="item.title" :prepend-icon="item.icon" no-action v-if="rolStore === item.rol">
 
           <v-list-tile slot="activator">
-
             <v-list-tile-content>
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
             </v-list-tile-content>
@@ -96,6 +95,7 @@
 
 <script>
 import avatar from "@/components/common/Avatar.vue";
+import { store } from "@/store"
 export default {
   name: "panel",
   components: {
@@ -103,8 +103,10 @@ export default {
   },
   data() {
     return {
+      rolStore: store.state.rol,
       drawer: true,
       items: [{
+          rol: "admin",
           title: "Usuarios",
           icon: "account_box",
           menu: [
@@ -122,6 +124,30 @@ export default {
           ]
         },
         {
+          rol: "admin",
+          title: "Informes",
+          icon: "list_alt",
+          menu: [
+            {
+              title: "Ver todos los informes",
+              icon: "visibility",
+              route: "/informes"
+            },
+            {
+              title: "Ver informes propios",
+              icon: "visibility",
+              route: "/informes"
+            },
+            {
+              title: "Crear Informe",
+              icon: "add",
+              route: "/informes/cargar"
+            },
+            
+          ]
+        },
+        {
+          rol: "hseq",
           title: "Informes",
           icon: "list_alt",
           menu: [
@@ -139,6 +165,7 @@ export default {
           ]
         },
         {
+          rol: "area",
           title: "Tareas",
           icon: "list_alt",
           menu: [

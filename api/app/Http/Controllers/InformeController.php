@@ -48,6 +48,7 @@ class InformeController extends Controller
             $informe->adjunto;
             $informe->hseq->user;
             $informe->tarea->each->area;
+            $informe->tarea->each->detalle;
             return response()->json($informe);
         }else{
             return response()->json('El informe no existe', 404);
@@ -73,7 +74,13 @@ class InformeController extends Controller
         return response()->json('Informe eliminado', 200);
     }
     public function informesHseq($idhseq){
-        $informes = Informe::with('hseq','zona', 'estado', 'prioridad', 'adjunto')->where('idhseq', $idhseq)->get();
+        $informes = Informe::with('hseq','zona', 'estado', 'prioridad', 'adjunto', 'tarea')->where('idhseq', $idhseq)->orderBy('fechalimite', 'ASC')->get();
         return response()->json($informes);
+    }
+    public function cerrar($id){
+        $informe = Informe::find($id);
+        $informe->idestado = 2;
+        $informe->save();
+        return response()->json('Informe cerrado', 200);
     }
 }

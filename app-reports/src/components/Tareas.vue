@@ -12,7 +12,7 @@
                         </div> 
                     </v-card-title> 
                     <v-card-actions> 
-                        <v-btn flat block color="cyan darken-1">Ver</v-btn> 
+                        <v-btn flat block color="cyan darken-1" :to="`/tareas/${tarea.idtarea}/ver`">Ver</v-btn>
                     </v-card-actions> 
                 </v-card> 
             </v-flex> 
@@ -67,16 +67,20 @@ export default {
           }
         })
         .then(function (response) {
+          
           setTimeout(function(){ 
           self.tareas = response.data;
           if (self.tareas.length < 1){
             self.noTareas = true
           }
           self.$store.commit('setLoading', false)
-          }, 2000);
+          }, 500);
         })
         .catch(function (err) {
-          //console.log(err.response)
+          if (err.response.status === 401){
+            self.$store.commit('setExpired', true)
+            self.$router.push('/logout')
+          }
           self.error = true
           self.$store.commit('setError', err.message)
           self.$store.commit('setLoading', false)

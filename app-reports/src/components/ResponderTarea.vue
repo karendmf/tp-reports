@@ -1,0 +1,64 @@
+<template>
+<v-container>
+        <v-flex class="text-xs-center" mt-3>
+            <h1>Respuesta</h1>
+        </v-flex>
+        <v-flex mt-2>
+            <v-form ref="form" v-model="valid" lazy-validation>
+               <v-textarea v-model="descripcion" label="Detalle su respuesta" :rules="textareaRules" required></v-textarea>
+                <br>
+                <v-btn :disabled="!valid" @click="submit" outline color="cyan darken-1">
+                    Enviar
+                </v-btn>
+                <v-btn @click="clear" outline>
+                    Limpiar Formulario
+                </v-btn>
+            </v-form>
+        </v-flex>
+</v-container>
+</template>
+
+<script>
+import moment from 'moment';
+import axios from "axios";
+export default {
+    props: ['idTarea'],
+    data: () => ({
+        moment: moment,
+        valid: true,
+        textarea: "",
+        descripcion: null,
+        textareaRules: [v => !!v || "Es requerido que redacte una respuesta"],
+    }),
+
+    methods: {
+        submit() {
+            var self = this;
+            if (this.$refs.form.validate()) {
+                // Native form submission is not yet supported
+                axios.post(
+                        "/tareadetalle/new", {
+                            descripcion: this.descripcion,
+                            idtarea: this.idTarea,
+                        }, {
+                            headers: {
+                                Authorization: "Bearer " + localStorage.getItem("token")
+                            }
+                        }
+                    )
+                    .then(function (response) {
+                        //redirigir al inicio?
+                        console.log('Se creo la respuesta',response.data)
+                        self.$parent.fetchTarea()
+                    })
+                    .catch(error => {
+                        console.log(error.response)
+                    });
+            }
+        },
+        clear() {
+            this.$refs.form.reset();
+        },
+    }
+}    
+</script>

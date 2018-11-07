@@ -75,6 +75,7 @@ $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () 
     $router->put('update/{id}', 'InformeController@update');
     $router->delete('delete/{id}', 'InformeController@delete');
     $router->get('me/{idhseq}', 'InformeController@informesHseq');
+    $router->get('cerrar/{id}', 'InformeController@cerrar');
 });
 
 //Imagenes de informe:
@@ -84,6 +85,7 @@ $router->group(['prefix' => 'informe/img', 'middleware' => 'jwt-auth'], function
     $router->post('new', 'AdjuntoinformeController@create');
     $router->put('update/{id}', 'AdjuntoinformeController@update');
     $router->delete('delete/{id}', 'AdjuntoinformeController@delete');
+    
 });
 
 //Tarea:
@@ -122,4 +124,12 @@ $router->group(['prefix' => 'zona', 'middleware' => 'jwt-auth'], function () use
     $router->put('update/{id}', 'ZonaController@update');
     $router->delete('delete/{id}', 'ZonaController@delete');
 
+});
+//Tarea Detalle:
+$router->group(['prefix' => 'tareadetalle', 'middleware' => 'jwt-auth'], function () use ($router) {
+    $router->get('ver', 'TareadetalleController@index');
+    $router->get('ver/{id}', 'TareadetalleController@show');
+    $router->post('new', 'TareadetalleController@create');
+    $router->put('update/{id}', 'TareadetalleController@update');
+    $router->delete('delete/{id}', 'TareadetalleController@delete');
 });

@@ -15,9 +15,15 @@ class TareaController extends Controller
 
     public function show($id)
     {
-        $tarea = Tarea::find($id);
-        $tarea->area;
-        return response()->json($tarea);
+        if($tarea = Tarea::find($id)){
+            $tarea->area;
+            $tarea->detalle;
+            $tarea->informe->zona;
+            $tarea->informe->prioridad;
+            return response()->json($tarea);
+        }else{
+            return response()->json('La tarea no existe', 404);
+        }
     }
     public function create(Request $request)
     {

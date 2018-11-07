@@ -61,8 +61,11 @@ export default {
                         self.$refs.form.reset()
                     })
                     .catch(error => {
+                        if (error.response.status === 401){
+                            self.$store.commit('setExpired', true)
+                            self.$router.push('/logout')
+                        }
                         this.fallo = true
-                        console.log(error)
                     });
             }
         },

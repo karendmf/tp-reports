@@ -11,13 +11,21 @@ export const store = new Vuex.Store({
   state: { 
     user: null, 
     error: null,
+    expired:false,
     h: null,
     a: null,
     loading: false, 
     isLogged: false,
-    r:null
+    r:null,
+    rol: null
   }, 
   mutations: {
+    setRol (state, payload) { 
+      state.rol = payload 
+    },
+    setExpired (state, payload) { 
+      state.expired = payload 
+    },
     registrarUsuario(state, payload){
       state.r = payload
     },
@@ -32,6 +40,7 @@ export const store = new Vuex.Store({
         state.error= null
         localStorage.removeItem('token')
         state.r = null
+        state.rol= null
     }, 
     setUser (state, payload) { 
       state.user = payload 
@@ -68,17 +77,21 @@ export const store = new Vuex.Store({
         commit('setError', null) 
         router.push('/') 
         localStorage.setItem('token', response.data.token)
-        if (response.data.usuario.rol === 'admin' || response.data.usuario.rol === 'hseq'){
-            commit('setH', response.data.usuario.hseq.idhseq)
-            //console.log();
+        if (response.data.usuario.rol === 'admin'){
+          commit('setH', response.data.usuario.hseq.idhseq)
+        }else if (response.data.usuario.rol === 'hseq'){
+          commit('setH', response.data.usuario.hseq.idhseq)
         }else{
           commit('setA', response.data.usuario.area.idarea )
         }
+        commit('setRol', response.data.usuario.rol)
         store.commit('LOGIN_USER')
         commit('setLoading', false)
+        commit('setExpired', false)
         //console.log(response.data); 
       }) 
       .catch(error => { 
+        console.log(error.response);
         commit('setError', error.message) 
         commit('setLoading', false) 
       }) 

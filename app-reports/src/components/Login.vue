@@ -11,7 +11,10 @@
             <v-flex> 
               <v-alert type="error" dismissible v-model="alert"> 
                 {{ error }} 
-              </v-alert> 
+              </v-alert>
+              <v-alert type="error" dismissible :value='true' v-if='errorg'> 
+                Su sesión ha expirado.<br>Por favor, inicie sesión nuevamente.
+              </v-alert>
             </v-flex> 
             <v-flex> 
               <v-text-field 
@@ -45,8 +48,8 @@ export default {
     return {
       usuario: '',
       password: '',
-      alert: false
-      
+      alert: false,
+      errorg: this.$store.state.expired
     }
   },
   beforeCreate() {

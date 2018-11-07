@@ -34,5 +34,8 @@ class Tarea extends Model
     public function area(){
         return $this->belongsTo(Area::class, 'idarea');
     }
+    public function detalle(){
+        return $this->hasOne(Tareadetalle::class, 'idtarea');
+    }
 
 }

@@ -87,7 +87,10 @@ export default {
           //console.log(self.areas);
         })
         .catch(error => {
-          console.log(error.response);
+          if (error.response.status === 401){
+            self.$store.commit('setExpired', true)
+            self.$router.push('/logout')
+          }
         });
     },
     addLine() {

@@ -103,16 +103,10 @@ export default {
     this.getPrioridad();
   },
   methods: {
-    /* selectableDays (date) {
-      const today = new Date('2018-11-03')
-      return date >= today && date.getDay() === 1
-    }, */
     submit() {
       var self = this;
       if (this.$refs.form.validate()) {
-        // Native form submission is not yet supported
-        axios
-          .post(
+        axios.post(
             "/informe/new", {
               idhseq: this.$store.state.h,
               titulo: this.titulo,
@@ -134,8 +128,11 @@ export default {
             self.$refs.dropzone.processQueue()
           })
           .catch(error => {
+            if (error.response.status === 401){
+              self.$store.commit('setExpired', true)
+              self.$router.push('/logout')
+            }
             this.fallo = true;
-            console.log(error.response);
           });
       }
     },
@@ -161,7 +158,10 @@ export default {
           //console.log(self.zonas)
         })
         .catch(error => {
-          //console.log(error.response)
+          if (error.response.status === 401){
+            self.$store.commit('setExpired', true)
+            self.$router.push('/logout')
+          }
         });
     },
     getPrioridad() {
@@ -177,7 +177,10 @@ export default {
           //console.log(self.prioridad)
         })
         .catch(error => {
-          //console.log(error.response)
+          if (error.response.status === 401){
+            self.$store.commit('setExpired', true)
+            self.$router.push('/logout')
+          }
         });
     }
   },

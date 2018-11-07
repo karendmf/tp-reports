@@ -152,6 +152,10 @@
                             }
                         })
                         .catch(error => {
+                            if (error.response.status === 401){
+                                self.$store.commit('setExpired', true)
+                                self.$router.push('/logout')
+                            }
                             self.$store.commit('setError', error.response.data) 
                             self.$store.commit('setLoading', false)
                             //console.log('catch', error.response.data)
