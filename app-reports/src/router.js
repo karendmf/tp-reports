@@ -19,6 +19,7 @@ import RegistrarUser from '@/components/Usuario/RegistrarUser'
 import SolicitarUsuario from '@/components/Usuario/SolicitarUsuario'
 import CargarArea from '@/components/Usuario/CargarArea'
 import CargarHSEQ from '@/components/Usuario/CargarHSEQ'
+import Usuarios from '@/components/Usuario/Usuarios'
 
 //SESION
 import Login from '@/components/Sesion/Login'
@@ -163,6 +164,20 @@ const routes = [{
   {
     path: '/usuario/nuevo/area',
     component: CargarArea,
+    meta: {
+      requiresAuth: true
+    },
+    beforeEnter: (to, from, next) => {
+      if (store.state.rol !== 'admin') {
+        next('/')
+      } else {
+        next()
+      }
+    }
+  },
+  {
+    path: '/usuarios',
+    component: Usuarios,
     meta: {
       requiresAuth: true
     },

@@ -18,10 +18,10 @@
                     item-text="nombre" 
                     item-value="idcargo"
                     :rules="[v => !!v || 'Se requiere ingresar un cargo']"></v-select>
-                    <v-btn :disabled="!valid" @click="submit">
+                    <v-btn :disabled="!valid" @click="submit" outline color="cyan darken-1">
                         Enviar
                     </v-btn>
-                    <v-btn @click="clear">Limpiar Formulario</v-btn>
+                    <v-btn @click="clear" outline>Limpiar Formulario</v-btn>
                 </v-form>
             </v-flex>
         </v-layout>

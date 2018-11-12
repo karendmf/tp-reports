@@ -113,7 +113,7 @@ export default {
             {
               title: "Ver Usuarios",
               icon: "visibility",
-              route: "/usuario"
+              route: "/usuarios"
             },
             {
               title: "Registrar Usuario",
@@ -134,7 +134,7 @@ export default {
               route: "/informes"
             },
             {
-              title: "Ver informes propios",
+              title: "Ver mis informes",
               icon: "visibility",
               route: "/informes"
             },
