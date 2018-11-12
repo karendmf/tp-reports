@@ -53,8 +53,8 @@ $router->group(['prefix' => 'area', 'middleware' => 'jwt-auth'], function () use
 
 //Solicitudes
 $router->group(['prefix' => 'solicitudes', 'middleware' => 'jwt-auth'], function () use ($router) {
-    $router->get('ver', 'SolicitudesController@index');
-    $router->delete('delete/{id}', 'SolicitudesController@delete');
+    $router->get('ver', 'SolicitudController@index');
+    $router->delete('delete/{id}', 'SolicitudController@delete');
 });
 
 //Cargo:

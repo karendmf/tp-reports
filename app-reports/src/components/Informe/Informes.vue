@@ -19,6 +19,7 @@
           <v-card-text>
             <div>Cantidad de tareas: {{informe.tarea.length}}</div>
             <div>Fecha límite: <br>{{ moment(informe.fechalimite).format("dddd D MMMM YYYY") }}</div>
+            <div class="font-weight-medium">Estado: {{informe.estado.nombre}}</div>
           </v-card-text>
           <v-card-actions>
             <v-btn flat block color="cyan darken-1" :to="`/informes/${informe.idinforme}/ver`">Ver</v-btn>

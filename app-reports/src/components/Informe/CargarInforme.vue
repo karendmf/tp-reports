@@ -63,4 +63,4 @@
   </v-container>
 </template>
 
-<script src="./Informe/JS_informe.js"></script>
+<script src="./JS_informe.js"></script>

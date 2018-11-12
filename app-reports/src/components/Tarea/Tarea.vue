@@ -36,9 +36,6 @@
           
         </v-flex>
     </v-layout>
-    <!-- <v-btn @click="submit" outline color="cyan darken-1">
-            Enviar
-    </v-btn> -->
 </div>
 </template>
 

@@ -5,7 +5,7 @@
         </v-flex>
         <v-flex mt-2>
             <v-form ref="form" v-model="valid" lazy-validation>
-               <v-textarea v-model="descripcion" label="Detalle su respuesta" :rules="textareaRules" required></v-textarea>
+               <v-textarea v-model="descripcion" label="Detalle su respuesta" :rules="textareaRules" required rows='1' auto-grow></v-textarea>
                 <br>
                 <v-btn :disabled="!valid" @click="submit" outline color="cyan darken-1">
                     Enviar

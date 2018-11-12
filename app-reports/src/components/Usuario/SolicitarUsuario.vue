@@ -1,4 +1,5 @@
 <template>
+<v-layout row justify-center>
   <v-flex xs12 text-xs-center pa-3 ma-3>
     <h1>Solicitar Usuario</h1>
     <v-alert type="error" dismissible v-model="alert" outline transition="scale-transition">
@@ -12,6 +13,19 @@
       <v-btn @click="submit" color="cyan darken-1" dark>Enviar</v-btn>
     </v-form>
   </v-flex>
+  <v-fle>
+    <v-dialog v-model="dialog" persistent max-width="350" >
+      <v-card class='text-xs-center'>
+        <v-card-title class="headline justify-center">Solicitud de usuario nuevo</v-card-title>
+        <v-card-text>Su solicitud se ha enviado con exito.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="cyan darken-1" flat @click.native="dialog = false">Aceptar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-fle>
+</v-layout>
 </template>
 
 <script>
@@ -20,7 +34,7 @@ export default {
   data: () => ({
     alert: false,
     valid: true,
-
+    dialog: false,
     nombre: "",
     apellido: "",
     namesurname: [
@@ -57,7 +71,7 @@ export default {
             console.log(response);
             self.$store.commit("setError", null);
             if (response.status === 201) {
-              //alerta de cargado + redirigir a login?
+              self.dialog=true;
               self.$refs.form.reset();
             }
           })

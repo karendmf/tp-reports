@@ -1,7 +1,7 @@
 <template> 
       <v-flex xs12 text-xs-center pa-3 ma-2>
         <v-avatar size="70px" color="cyan darken-1">
-            <img src="../assets/logo_blanco.svg" alt="reportS">
+            <img src="@/assets/logo_blanco.svg" alt="reportS">
         </v-avatar>
         <br>
         <br>

@@ -31,7 +31,24 @@
                 </v-flex>
             </v-card>
     </v-flex>
-
+    <v-flex xs12>
+      <v-card>
+        <v-container grid-list-sm fluid>
+          <v-layout row wrap>
+            <v-carousel>
+                <v-carousel-item
+                    lazy
+                    v-for="adjunto in tarea.informe.adjunto"
+                    :key="adjunto.idadjunto"
+                    :src="url + adjunto.url"
+                    max-height="550"
+                    contain
+                    ></v-carousel-item>
+                </v-carousel>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </v-flex>
     <v-flex xs12 mt-3>
         <v-card>
             <v-flex pa-1 text-xs-center>
@@ -80,7 +97,7 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
-import responder from '@/components/ResponderTarea'
+import responder from '@/components/Tarea/ResponderTarea'
 export default {
     props: ['idTarea'],
     data(){
@@ -88,6 +105,7 @@ export default {
             respuesta: false,
             moment: moment,
             tarea: null,
+            url: this.$storageURL
         }
     },
     components:{

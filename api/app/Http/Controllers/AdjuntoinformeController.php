@@ -36,7 +36,7 @@ class AdjuntoinformeController extends Controller
             $adjuntoinforme->url = $url . $nombre;
 
             if ($adjuntoinforme->save()) {
-                $image->move($url, $nombre);
+                $image->move(storage_path($url), $nombre);
                 return response()->json($adjuntoinforme, 201);
             
             } else {

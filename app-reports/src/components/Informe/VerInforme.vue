@@ -31,7 +31,6 @@
         <v-flex xs12 flexbox>
             <v-card color="white" height="100%">
                 <v-flex pa-4>
-
                     <div class="text-xs-center">
                         <v-badge color="cyan darken-3">
                             <span slot="badge">{{informe.tarea.length}}</span>
@@ -40,7 +39,8 @@
                     </div>
                     <v-expansion-panel expand>
                         <v-expansion-panel-content v-for="tarea in informe.tarea" :key="tarea.idtarea">
-                            <div slot="header">{{tarea.titulo}}</div>
+                            <div slot="header">{{tarea.titulo}} <v-icon v-if="tarea.detalle" color="cyan darken-3">check_circle</v-icon></div>
+                            
                             <v-card>
                                 <v-card-text class="cyan lighten-5">
                                     <div><span class="font-weight-light font-italic">Descripción:</span></div>{{tarea.descripcion}}
@@ -53,6 +53,11 @@
                                             {{ value }}%
                                         </v-progress-circular>
                                     </div>
+                                    <v-divider class="mar"></v-divider>
+                                    <div v-if="tarea.detalle">
+                                        <div><span class="font-weight-light font-italic">Respuesta:</span></div>{{tarea.detalle.descripcion}}
+                                        <div class="caption font-italic text-xs-right">{{ moment(tarea.detalle.fecha_hora).format("lll")}}</div>
+                                    </div>
                                 </v-card-text>
                             </v-card>
                         </v-expansion-panel-content>
@@ -64,19 +69,21 @@
             <v-card color="white" height="100%">
                 <v-flex pa-4>
                     <div class="headline text-xs-center font-weight-medium">Adjuntos</div>
-                    <!-- <v-carousel>
-                                <v-carousel-item
-                                lazy
-                                v-for="adjunto in informe.adjunto"
-                                :key="adjunto.idadjunto"
-                                :src="adjunto.url"
-                                ></v-carousel-item>
-                            </v-carousel> -->
+                    <v-carousel>
+                        <v-carousel-item
+                            lazy
+                            v-for="adjunto in informe.adjunto"
+                            :key="adjunto.idadjunto"
+                            :src="url + adjunto.url"
+                            max-height="500"
+                            contain
+                            ></v-carousel-item>
+                    </v-carousel>
                 </v-flex>
             </v-card>
         </v-flex>
         <v-flex flexbox v-if="informe">
-            <v-btn @click="dialog = true" :disabled="!porcentaje(informe.estado.idestado)" color="cyan darken-3" flat>Cerrar informe</v-btn>
+            <v-btn @click="dialog = true" :disabled="!tareasCompletas()" color="cyan darken-3" flat>Cerrar informe</v-btn>
             <v-dialog v-model="dialog" max-width="290">
                 <v-card>
                     <v-card-title class="headline text-xs-center">¿Desea cerrar el informe actual?</v-card-title>
@@ -106,8 +113,9 @@ export default {
       informe: null,
       colorP: null,
       value: 100,
-      cerrar: false,
       valid: false,
+      cerrar: false,
+      url: this.$storageURL
     };
   },
   created() {
@@ -156,15 +164,17 @@ export default {
           }
         });
     },
-    porcentaje(estado){
+    tareasCompletas(){
         var self= this
-        if (  estado === '2' ){
-            return false
-        }else if (self.value === 100){
-              return true
-        }else{
-            return false
-        }
+        self.informe.tarea.forEach(element => {
+            if (element.detalle !== null){
+                 self.cerrar = true
+                 console.log(element.detalle)
+            }else{
+                self.cerrar = false
+            }
+        });
+        return self.cerrar
     }
   }
 };
