@@ -6,6 +6,7 @@ import {
 } from "vue2-editor";
 import axios from "axios";
 import tarea from '@/components/Tarea/Tarea';
+import { store } from "@/store"
 export default {
   data: () => ({
     moment: moment,
@@ -66,7 +67,7 @@ export default {
     textarea: "",
     descripcion: null,
     textareaRules: [v => !!v || "Es requerido que redacte un informe"],
-
+    
     dropzoneOptions: {
       url: "http://localhost:8000/informe/img/new",
       maxFiles: 4,
@@ -126,6 +127,10 @@ export default {
             self.idinforme = response.data.idinforme
             self.$refs.tarea.submit(self.idinforme)
             self.$refs.dropzone.processQueue()
+            alert('Informe creado')
+            setTimeout(function(){
+              self.$router.push('/informes/'+self.idinforme+'/ver')
+            }, 700);
           })
           .catch(error => {
             if (error.response.status === 401){

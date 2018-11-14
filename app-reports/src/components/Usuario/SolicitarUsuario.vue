@@ -13,7 +13,7 @@
       <v-btn @click="submit" color="cyan darken-1" dark>Enviar</v-btn>
     </v-form>
   </v-flex>
-  <v-fle>
+  <v-flex>
     <v-dialog v-model="dialog" persistent max-width="350" >
       <v-card class='text-xs-center'>
         <v-card-title class="headline justify-center">Solicitud de usuario nuevo</v-card-title>
@@ -24,7 +24,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-fle>
+  </v-flex>
 </v-layout>
 </template>
 

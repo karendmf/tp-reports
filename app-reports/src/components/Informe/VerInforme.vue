@@ -68,8 +68,8 @@
         <v-flex xs12 flexbox>
             <v-card color="white" height="100%">
                 <v-flex pa-4>
-                    <div class="headline text-xs-center font-weight-medium">Adjuntos</div>
-                    <v-carousel>
+                    <div class="headline text-xs-center font-weight-medium">Imágenes</div>
+                    <v-carousel light hide-delimiters>
                         <v-carousel-item
                             lazy
                             v-for="adjunto in informe.adjunto"
@@ -82,7 +82,16 @@
                 </v-flex>
             </v-card>
         </v-flex>
-        <v-flex flexbox v-if="informe">
+        <v-flex>
+            <v-alert
+            :value="true"
+            type="info"
+            v-if="informe.idestado===2"
+            >
+            Informe cerrado.
+            </v-alert>
+        </v-flex>
+        <v-flex flexbox v-if="informe && informe.idestado==1">
             <v-btn @click="dialog = true" :disabled="!tareasCompletas()" color="cyan darken-3" flat>Cerrar informe</v-btn>
             <v-dialog v-model="dialog" max-width="290">
                 <v-card>
@@ -105,78 +114,76 @@
 import axios from "axios";
 import moment from "moment";
 export default {
-  props: ["idInforme"],
-  data() {
-    return {
-      dialog: false,
-      moment: moment,
-      informe: null,
-      colorP: null,
-      value: 100,
-      valid: false,
-      cerrar: false,
-      url: this.$storageURL
-    };
-  },
-  created() {
-    moment.locale("es");
-    this.fetchInforme();
-  },
-  methods: {
-    colorPrioridad(prioridad) {
-      if (prioridad === 1) {
-        this.colorP = "teal darken-4";
-      } else if (prioridad === 2) {
-        this.colorP = "yellow darken-4";
-      } else if (prioridad === 3) {
-        this.colorP = "red darken-4";
-      }
+    props: ["idInforme"],
+    data() {
+        return {
+            dialog: false,
+            moment: moment,
+            informe: null,
+            colorP: null,
+            value: 100,
+            valid: false,
+            cerrar: true,
+            url: this.$storageURL
+        };
     },
-    cerrarInforme(){
-        var self = this;
-        axios.get("/informe/cerrar/"+ self.informe.idinforme, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
-        .then(function(response){
-            console.log(response.data)
-            self.fetchInforme()
-        }).catch(function(err) {
-            console.log(err.response)
-        })
+    created() {
+        moment.locale("es");
+        this.fetchInforme();
     },
-    fetchInforme() {
-      var self = this;
-      axios.get("/informe/ver/" + self.idInforme, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
-        .then(function(response) {
-          self.informe = response.data;
-          self.colorPrioridad(self.informe.prioridad.idprioridad);
-        })
-        .catch(function(err) {
-          if (err.response.status === 401) {
-            self.$store.commit("setExpired", true);
-            self.$router.push("/logout");
-          }
-        });
-    },
-    tareasCompletas(){
-        var self= this
-        self.informe.tarea.forEach(element => {
-            if (element.detalle !== null){
-                 self.cerrar = true
-                 console.log(element.detalle)
-            }else{
-                self.cerrar = false
+    methods: {
+        colorPrioridad(prioridad) {
+            if (prioridad === 1) {
+                this.colorP = "teal darken-4";
+            } else if (prioridad === 2) {
+                this.colorP = "yellow darken-4";
+            } else if (prioridad === 3) {
+                this.colorP = "red darken-4";
             }
-        });
-        return self.cerrar
+        },
+        cerrarInforme() {
+            var self = this;
+            axios.get("/informe/cerrar/" + self.informe.idinforme, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
+                .then(function (response) {
+                    console.log(response.data)
+                    self.fetchInforme()
+                }).catch(function (err) {
+                    console.log(err.response)
+                })
+        },
+        fetchInforme() {
+            var self = this;
+            axios.get("/informe/ver/" + self.idInforme, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
+                .then(function (response) {
+                    self.informe = response.data;
+                    self.colorPrioridad(self.informe.prioridad.idprioridad);
+                })
+                .catch(function (err) {
+                    if (err.response.status === 401) {
+                        self.$store.commit("setExpired", true);
+                        self.$router.push("/logout");
+                    }
+                });
+        },
+        tareasCompletas() {
+            var self = this
+            var tareas = self.informe.tarea
+            for (let i = 0; i < tareas.length; i++) {
+                if (tareas[i].detalle === null) {
+                    return self.cerrar = false
+                }
+            }
+            return self.cerrar
+        }
     }
-  }
 };
 </script>
 <style>

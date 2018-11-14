@@ -120,6 +120,11 @@ export default {
               icon: "add",
               route: "/usuario/nuevo"
             },
+            {
+              title: "Solicitudes de Usuario",
+              icon: "how_to_vote",
+              route: "/solicitudes"
+            },
             
           ]
         },

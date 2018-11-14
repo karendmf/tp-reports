@@ -35,7 +35,7 @@
       <v-card>
         <v-container grid-list-sm fluid>
           <v-layout row wrap>
-            <v-carousel>
+            <v-carousel light hide-delimiters>
                 <v-carousel-item
                     lazy
                     v-for="adjunto in tarea.informe.adjunto"
@@ -70,7 +70,7 @@
                 </v-flex>
             </v-card-actions>
             <v-card-actions v-if="!tarea.detalle"> 
-                <v-btn v-show="respuesta == false" flat block color="cyan darken-1" @click="respuesta = true">Responder</v-btn>
+                <v-btn v-show="respuesta == false" flat block color="cyan darken-1" @click="respuesta = true">Responder y Cerrar Tarea</v-btn>
                 <v-btn v-show="respuesta == true" flat block color="cyan darken-1" @click="respuesta = false">Cancelar</v-btn>
             </v-card-actions>
         </v-card>

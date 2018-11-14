@@ -20,6 +20,7 @@ import SolicitarUsuario from '@/components/Usuario/SolicitarUsuario'
 import CargarArea from '@/components/Usuario/CargarArea'
 import CargarHSEQ from '@/components/Usuario/CargarHSEQ'
 import Usuarios from '@/components/Usuario/Usuarios'
+import VerSolicitudes from '@/components/Usuario/VerSolicitudes'
 
 //SESION
 import Login from '@/components/Sesion/Login'
@@ -194,6 +195,20 @@ const routes = [{
     component: SolicitarUsuario,
     meta: {
       requiresAuth: false,
+    }
+  },
+  {
+    path: '/solicitudes',
+    component: VerSolicitudes,
+    meta: {
+      requiresAuth: true
+    },
+    beforeEnter: (to, from, next) => {
+      if (store.state.rol !== 'admin') {
+        next('/')
+      } else {
+        next()
+      }
     }
   },
 ]

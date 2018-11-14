@@ -9,7 +9,8 @@ class TareaController extends Controller
 {
     public function index()
     {
-        $tarea = Tarea::with('area')->get();
+        $tarea = Tarea::all();
+        $tarea->each->area;
         return response()->json($tarea);
     }
 
@@ -55,7 +56,9 @@ class TareaController extends Controller
         return response()->json('tarea eliminada', 200);
     }
     public function tareasArea($idarea){
-        $tareas = Tarea::with('informe')->where('idarea', $idarea)->get();
+        $tareas = Tarea::where('idarea', $idarea)->get();
+        $tareas->each->informe;
+        $tareas->each->area;
         return response()->json($tareas);
     }
 }
