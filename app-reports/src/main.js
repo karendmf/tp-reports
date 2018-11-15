@@ -6,11 +6,13 @@ import 'babel-polyfill'
 import router from './router'
 import { store } from './store'
 import axios from 'axios'
+import 'vue-event-calendar/dist/style.css'
+import vueEventCalendar from 'vue-event-calendar'
+import VueGoogleCharts from 'vue-google-charts'
 
 Vue.use(Vuetify)
-
-
-
+Vue.use(vueEventCalendar, {locale: 'es', color: 'gray'}) 
+Vue.use(VueGoogleCharts, {'language': 'es'})
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'http://localhost:8000';

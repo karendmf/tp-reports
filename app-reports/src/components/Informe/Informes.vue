@@ -18,7 +18,12 @@
           <v-divider></v-divider>
           <v-card-text>
             <div>Cantidad de tareas: {{informe.tarea.length}}</div>
-            <div>Fecha límite: <br>{{ moment(informe.fechalimite).format("dddd D MMMM YYYY") }}</div>
+            <div>Fecha límite:
+              <span v-if="moment().format() > moment(informe.fechalimite).format()" class="font-weight-thin font-italic">CADUCADO</span>
+              <br>
+              {{ moment(informe.fechalimite).format("dddd D MMMM YYYY") }}
+            </div>
+            
             <div class="font-weight-medium">Estado: {{informe.estado.nombre}}</div>
           </v-card-text>
           <v-card-actions>
@@ -38,7 +43,6 @@
  
 <script> 
 import loading from "@/components/common/loading.vue";
-import router from '@/router'
 import { store } from '@/store'
 import axios from 'axios'
 import moment from 'moment'
@@ -85,7 +89,7 @@ export default {
           }
         })
         .then(function (response) {
-          console.log(response.data)
+          console.log(response.data) // eslint-disable-line no-console
           setTimeout(function(){ 
           self.informes = response.data;
           if (self.informes.length < 1){

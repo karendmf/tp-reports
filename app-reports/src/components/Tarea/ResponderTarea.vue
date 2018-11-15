@@ -48,12 +48,11 @@ export default {
                         }
                     )
                     .then(function (response) {
-                        //redirigir al inicio?
-                        console.log('Se creo la respuesta',response.data)
+                        console.log('Se creo la respuesta',response.data) // eslint-disable-line no-console
                         self.$parent.fetchTarea()
                     })
                     .catch(error => {
-                        console.log(error.response)
+                        console.log(error.response) // eslint-disable-line no-console
                     });
             }
         },

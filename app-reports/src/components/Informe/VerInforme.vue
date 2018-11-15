@@ -1,6 +1,11 @@
 <template>
 <v-container fluid grid-list-md v-if="informe && colorP" fill-height>
     <v-layout row wrap>
+        <v-flex xs12 v-if="moment().format() > moment(informe.fechalimite).format()">
+            <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
+                Informe caducado.
+            </v-alert>
+        </v-flex>
         <v-flex xs12 md3 flexbox>
             <v-card color="white">
                 <v-flex pa-3 text-xs-center>
@@ -117,6 +122,7 @@ export default {
     props: ["idInforme"],
     data() {
         return {
+            alert: true,
             dialog: false,
             moment: moment,
             informe: null,
@@ -149,10 +155,10 @@ export default {
                     }
                 })
                 .then(function (response) {
-                    console.log(response.data)
+                    console.log(response.data) // eslint-disable-line no-console
                     self.fetchInforme()
                 }).catch(function (err) {
-                    console.log(err.response)
+                    console.log(err.response) // eslint-disable-line no-console
                 })
         },
         fetchInforme() {

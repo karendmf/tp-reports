@@ -135,7 +135,7 @@
                             }
                         })
                         .then(function (response) {
-                            console.log(response)
+                            console.log(response) // eslint-disable-line no-console
                             self.$store.commit('setError', null)
                             if (response.status === 201){
                                 self.$store.commit('registrarUsuario', response.data)

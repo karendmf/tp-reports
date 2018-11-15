@@ -56,27 +56,24 @@ export default {
                     }
                 }).then(function (response) {
                     self.cargos = response.data
-                    console.log(self.cargos)
+                    console.log(self.cargos) // eslint-disable-line no-console
                 })
                 .catch(error => {
-                    console.log(error.response)
+                    console.log(error.response) // eslint-disable-line no-console
                 });
         },
         submit() {
             var self = this
             if (this.$refs.form.validate()) {
-                // Native form submission is not yet supported
                 axios.post('/hseq/new', {
-
                         idpersona: this.$store.state.r,
                         idcargo: this.idcargo
-
                     }, {
                         headers: {
                             Authorization: 'Bearer ' + localStorage.getItem('token')
                         }
                     }).then(function (response) {
-                        console.log(response)
+                        console.log(response) // eslint-disable-line no-console
                         self.$store.commit('registrarUsuario', null)
                         //redirigir a la info del usuario cargado
                         router.push('/')

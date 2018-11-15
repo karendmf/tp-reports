@@ -90,10 +90,10 @@ export default {
           if (self.tareas.length < 1){
             self.noTareas = true
           }
-          console.log(self.tareas)
+          console.log(self.tareas) // eslint-disable-line no-console
           self.$store.commit('setLoading', false)
           }, 500);
-          console.log(self.tareas)
+          console.log(self.tareas) // eslint-disable-line no-console
         })
         .catch(function (err) {
           if (err.response.status === 401){

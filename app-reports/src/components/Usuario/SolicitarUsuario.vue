@@ -68,7 +68,7 @@ export default {
             }
           )
           .then(function (response) {
-            console.log(response);
+            console.log(response) // eslint-disable-line no-console
             self.$store.commit("setError", null);
             if (response.status === 201) {
               self.dialog=true;
@@ -78,7 +78,7 @@ export default {
           .catch(error => {
             self.$store.commit("setError", error.response.data);
             self.$store.commit("setLoading", false);
-            console.log('catch', error.response.data)
+            console.log('catch', error.response.data) // eslint-disable-line no-console
           });
       }
     },

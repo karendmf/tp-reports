@@ -14,6 +14,7 @@
           </v-list-tile-action>
           <v-list-tile-title>Inicio</v-list-tile-title>
         </v-list-tile>
+        
         <v-list-group v-for="item in items" v-model="item.active" :key="item.title" :prepend-icon="item.icon" no-action v-if="rolStore === item.rol">
 
           <v-list-tile slot="activator">
@@ -23,7 +24,7 @@
           </v-list-tile>
 
 
-          <v-list-tile v-for="subItem in item.menu" :key="subItem.title" @click="" :to="subItem.route">
+          <v-list-tile v-for="subItem in item.menu" :key="subItem.title" :to="subItem.route">
             <v-list-tile-content>
               <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
             </v-list-tile-content>
@@ -34,7 +35,12 @@
           </v-list-tile>
         </v-list-group>
       </v-list>
-
+      <v-list-tile to="/calendario">
+          <v-list-tile-action>
+            <v-icon>calendar_today</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Calendario CAPEX</v-list-tile-title>
+        </v-list-tile>
       <v-divider></v-divider>
       <v-list dense>
         <v-list-tile to="/logout">

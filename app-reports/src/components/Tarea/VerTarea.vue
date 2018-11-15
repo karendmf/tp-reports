@@ -58,7 +58,6 @@
     </v-flex>
     <v-flex xs12 md6>
        <v-card >
-           
             <v-flex pa-4 >
                 <div class="headline text-xs-center text-uppercase font-weight-medium">{{tarea.titulo}}</div>
                 <v-divider class="mar"></v-divider>
@@ -125,7 +124,7 @@ export default {
             })
             .then(function(response){
                 self.tarea = response.data
-                console.log(self.tarea)
+                console.log(self.tarea) // eslint-disable-line no-console
             }).catch(function (err) {
                 if (err.response.status === 401){
                     self.$store.commit('setExpired', true)

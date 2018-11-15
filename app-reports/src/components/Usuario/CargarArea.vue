@@ -54,7 +54,7 @@ export default {
                             Authorization: 'Bearer ' + localStorage.getItem('token')
                         }
                     }).then(function (response) {
-                        console.log(response)
+                        console.log(response) // eslint-disable-line no-console
                         self.$store.commit('registrarUsuario', null)
                         //redirigir a la info del usuario cargado
                         router.push('/')

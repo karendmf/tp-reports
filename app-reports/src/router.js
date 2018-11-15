@@ -28,12 +28,21 @@ import Logout from '@/components/Sesion/Logout'
 
 //COMMON:
 import Landing from '@/components/common/Landing'
+import Calendario from '@/components/common/Calendario'
 
 /** Definición de rutas */
-const routes = [{
+const routes = [
   //COMMON:
+  {
     path: '/',
     component: Landing,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/calendario',
+    component: Calendario,
     meta: {
       requiresAuth: true,
     }
