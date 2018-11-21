@@ -9,6 +9,7 @@ import {
 import Informes from '@/components/Informe/Informes'
 import CargarInforme from '@/components/Informe/CargarInforme'
 import VerInforme from '@/components/Informe/VerInforme'
+import InformesAll from '@/components/Informe/InformesAll'
 
 //TAREA:
 import Tareas from '@/components/Tarea/Tareas'
@@ -64,7 +65,7 @@ const routes = [
   },
   //INFORME:
   {
-    path: '/informes',
+    path: '/informe/me',
     component: Informes,
     meta: {
       requiresAuth: true
@@ -80,7 +81,7 @@ const routes = [
     }
   },
   {
-    path: '/informes/cargar',
+    path: '/informe/cargar',
     component: CargarInforme,
     meta: {
       requiresAuth: true
@@ -96,7 +97,7 @@ const routes = [
     }
   },
   {
-    path: '/informes/:idInforme/ver',
+    path: '/informe/:idInforme/ver',
     component: VerInforme,
     props: true,
     meta: {
@@ -112,9 +113,23 @@ const routes = [
       }
     }
   },
+  {
+    path: '/informe/todos',
+    component: InformesAll,
+    meta: {
+      requiresAuth: true
+    },
+    beforeEnter: (to, from, next) => {
+      if (store.state.rol !== 'admin') {
+        next('/')
+      } else {
+        next()
+      }
+    }
+  },
   //TAREA:
   {
-    path: '/tareas',
+    path: '/tarea/me',
     component: Tareas,
     meta: {
       requiresAuth: true
@@ -128,7 +143,7 @@ const routes = [
     }
   },
   {
-    path: '/tareas/:idTarea/ver',
+    path: '/tarea/:idTarea/ver',
     component: VerTarea,
     props: true,
     meta: {
@@ -186,7 +201,7 @@ const routes = [
     }
   },
   {
-    path: '/usuarios',
+    path: '/usuario/todos',
     component: Usuarios,
     meta: {
       requiresAuth: true
@@ -200,14 +215,14 @@ const routes = [
     }
   },
   {
-    path: '/solicitar',
+    path: '/solicitud',
     component: SolicitarUsuario,
     meta: {
       requiresAuth: false,
     }
   },
   {
-    path: '/solicitudes',
+    path: '/usuario/solicitud',
     component: VerSolicitudes,
     meta: {
       requiresAuth: true

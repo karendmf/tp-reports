@@ -68,7 +68,7 @@ export default {
     textareaRules: [v => !!v || "Es requerido que redacte un informe"],
     
     dropzoneOptions: {
-      url: "http://localhost:8000/informe/img/new",
+      url: axios.defaults.baseURL + "/informe/img/new",
       maxFiles: 4,
       addRemoveLinks: true,
       thumbnailWidth: 140,
@@ -128,7 +128,7 @@ export default {
             self.$refs.dropzone.processQueue()
             alert('Informe creado')
             setTimeout(function(){
-              self.$router.push('/informes/'+self.idinforme+'/ver')
+              self.$router.push('/informe/'+self.idinforme+'/ver')
             }, 700);
           })
           .catch(error => {
@@ -151,8 +151,7 @@ export default {
     },
     getZonas() {
       var self = this;
-      axios
-        .get("http://localhost:8000/zona/ver", {
+      axios.get("/zona/ver", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
           }
@@ -170,8 +169,7 @@ export default {
     },
     getPrioridad() {
       var self = this;
-      axios
-        .get("http://localhost:8000/prioridad/ver", {
+      axios.get("/prioridad/ver", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
           }

@@ -16,6 +16,7 @@ Vue.use(VueGoogleCharts, {'language': 'es'})
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'http://localhost:8000';
+//axios.defaults.baseURL = 'http://192.168.0.18:8000';
 
 Vue.prototype.$storageURL = 'http://localhost/Trabajo%20Final/tp-reports/api/storage/';
 

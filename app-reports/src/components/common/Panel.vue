@@ -65,15 +65,14 @@
             <img src="@/assets/logo_blanco.svg" alt="reportS">
           </v-avatar>
         </v-btn>
-        reportS
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>notifications</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>settings</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-toolbar>
     <!-- FIN NAVBAR TOP -->
 
@@ -119,7 +118,7 @@ export default {
             {
               title: "Ver Usuarios",
               icon: "visibility",
-              route: "/usuarios"
+              route: "/usuario/todos"
             },
             {
               title: "Registrar Usuario",
@@ -129,7 +128,7 @@ export default {
             {
               title: "Solicitudes de Usuario",
               icon: "how_to_vote",
-              route: "/solicitudes"
+              route: "/usuario/solicitud"
             },
             
           ]
@@ -142,17 +141,17 @@ export default {
             {
               title: "Ver todos los informes",
               icon: "visibility",
-              route: "/informes"
+              route: "/informe/todos"
             },
             {
               title: "Ver mis informes",
               icon: "visibility",
-              route: "/informes"
+              route: "/informe/me"
             },
             {
               title: "Crear Informe",
               icon: "add",
-              route: "/informes/cargar"
+              route: "/informe/cargar"
             },
             
           ]
@@ -165,12 +164,12 @@ export default {
             {
               title: "Ver Informes",
               icon: "visibility",
-              route: "/informes"
+              route: "/informe/me"
             },
             {
               title: "Crear Informe",
               icon: "add",
-              route: "/informes/cargar"
+              route: "/informe/cargar"
             },
             
           ]
@@ -183,7 +182,7 @@ export default {
             {
               title: "Ver Tareas",
               icon: "visibility",
-              route: "/tareas"
+              route: "/tarea/me"
             },
             
             

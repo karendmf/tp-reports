@@ -7,18 +7,13 @@
       └── web.php (rutas endpoint)
  
 > composer update
+
 > php artisan jwt:secret
-(crea una clave secreta para ser usada por los tokens)
+(crea una clave secreta para ser usada por los tokens, solo se usa la primera vez que iniciamos la aplicación)
 
 > php -S localhost:8000 -t public
 
------------------------------------------------------------------------------
+0
 
-
-
-
- /* $hseq = DB::table('hseq')
-            ->join('cargo', 'hseq.idcargo', '=', 'cargo.idcargo')
-            ->join('persona', 'hseq.idpersona', '=', 'persona.idpersona')
-            ->select('persona.nombre as nombre', 'persona.apellido','persona.dni','persona.telefono','persona.email','persona.usuario','persona.legajo', 'cargo.nombre as cargo')
-            ->get(); */
+> php -S 0.0.0.0:8000 -t public
+(network)

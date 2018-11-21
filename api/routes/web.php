@@ -17,7 +17,6 @@ $router->get('/', function () use ($router) {
 
 
 $router->post('login', 'AuthController@login');
-$router->get('test', 'AuthController@test');
 $router->post('solicitud/new', 'SolicitudController@create');
 
 //Persona:

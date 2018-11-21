@@ -19,7 +19,7 @@
           <v-card-text>
             <div>Cantidad de tareas: {{informe.tarea.length}}</div>
             <div>Fecha límite:
-              <span v-if="moment().format() > moment(informe.fechalimite).format() && informe.estado.idestado==1" class="font-weight-thin font-italic">CADUCADO</span>
+              <span v-if="moment().format() > moment(informe.fechalimite).format()" class="font-weight-thin font-italic">CADUCADO</span>
               <br>
               {{ moment(informe.fechalimite).format("dddd D MMMM YYYY") }}
             </div>
@@ -83,7 +83,7 @@ export default {
       var self = this
       self.id = store.state.h;
       //console.log(self.id);
-      axios.get('/informe/me/' + self.id, {
+      axios.get('/informe/ver/', {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
           }

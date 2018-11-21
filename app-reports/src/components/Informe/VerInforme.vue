@@ -1,7 +1,7 @@
 <template>
 <v-container fluid grid-list-md v-if="informe && colorP" fill-height>
     <v-layout row wrap>
-        <v-flex xs12 v-if="moment().format() > moment(informe.fechalimite).format()">
+        <v-flex xs12 v-if="(moment().format() > moment(informe.fechalimite).format()) && informe.estado.idestado==1">
             <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
                 Informe caducado.
             </v-alert>
@@ -52,13 +52,13 @@
                                     <v-divider class="mar"></v-divider>
                                     <div><span class="font-weight-light font-italic">Área encargada de la tarea:</span></div>{{tarea.area.nombre}}
                                     <v-divider class="mar"></v-divider>
-                                    <div><span class="font-weight-light font-italic">Progreso:</span></div>
+                                    <!-- <div><span class="font-weight-light font-italic">Progreso:</span></div>
                                     <div class="text-xs-center">
                                         <v-progress-circular :rotate="180" :size="100" :width="15" :value="value" color="cyan darken-3">
                                             {{ value }}%
                                         </v-progress-circular>
                                     </div>
-                                    <v-divider class="mar"></v-divider>
+                                    <v-divider class="mar"></v-divider> -->
                                     <div v-if="tarea.detalle">
                                         <div><span class="font-weight-light font-italic">Respuesta:</span></div>{{tarea.detalle.descripcion}}
                                         <div class="caption font-italic text-xs-right">{{ moment(tarea.detalle.fecha_hora).format("lll")}}</div>

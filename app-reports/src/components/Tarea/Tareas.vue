@@ -18,7 +18,7 @@
                       <div class="font-weight-bold">Fecha límite: <br>{{ moment(tarea.informe.fechalimite).format("dddd D MMMM YYYY")}}</div>
                     </v-card-text>
                     <v-card-actions> 
-                        <v-btn flat block color="cyan darken-1" :to="`/tareas/${tarea.idtarea}/ver`">Ver</v-btn>
+                        <v-btn flat block color="cyan darken-1" :to="`/tarea/${tarea.idtarea}/ver`">Ver</v-btn>
                     </v-card-actions> 
                 </v-card> 
             </v-flex> 
