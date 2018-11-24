@@ -92,7 +92,10 @@ export const store = new Vuex.Store({
       }) 
       .catch(error => { 
         console.log(error.response);
-        commit('setError', error.message) 
+        commit('setError', 'Error al iniciar sesión, intente de nuevo en otro momento.')
+        if (error.response.status === 404){
+          commit('setError', 'Usuario o contraseña inconrrecta.')
+        }
         commit('setLoading', false) 
       }) 
     },

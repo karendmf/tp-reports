@@ -20,7 +20,17 @@ class InformeController extends Controller
     public function index()
     {
         $informes = Informe::with('zona', 'estado', 'prioridad', 'adjunto','tarea')->get();
-        return response()->json($informes);
+        $losInformes=[];
+        $i=0;
+        //$informes->each->hseq;
+        foreach ($informes as $informe) {
+            $usuario= $informe->hseq->user;
+            $losInformes[$i]['usuario']= $usuario;
+            $losInformes[$i]['informe']=$informe;
+            $i++;
+        }
+        return response()->json($losInformes);
+        
     }
 
     public function create(Request $request)

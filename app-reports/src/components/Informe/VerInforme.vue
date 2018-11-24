@@ -1,7 +1,7 @@
 <template>
 <v-container fluid grid-list-md v-if="informe && colorP" fill-height>
     <v-layout row wrap>
-        <v-flex xs12 v-if="(moment().format() > moment(informe.fechalimite).format()) && informe.estado.idestado==1">
+        <v-flex xs12 v-if="(moment().format() > moment(informe.fechalimite).format()) && informe.estado.idestado == 1">
             <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
                 Informe caducado.
             </v-alert>

@@ -25,6 +25,19 @@
                     <td class="text-xs-left">{{ props.item.email }}</td>
                     <td class="text-xs-left">{{ props.item.telefono }}</td>
                     <td class="text-xs-center">{{ props.item.rol }}</td>
+                    <td class="justify-center">
+                      <v-icon
+                        small
+                        class="mr-2"
+                      >
+                        visibility
+                      </v-icon>
+                      <v-icon
+                        small
+                      >
+                        edit
+                      </v-icon>
+                    </td>
                 </template>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 No hay resultados para "{{ search }}".
@@ -57,7 +70,8 @@ export default {
             { text: 'Legajo', value: 'legajo' },
             { text: 'Email', value: 'email' },
             { text: 'Telefono', value: 'tel' },
-            { text: 'Rol', value: 'rol' }
+            { text: 'Rol', value: 'rol' },
+            { text: 'Acciones', value: 'name', sortable: false }
             ],
             rowsperpageitems:[ 5, 10, 25, { "text": "Todos", "value": -1 } ],
             search: '',
