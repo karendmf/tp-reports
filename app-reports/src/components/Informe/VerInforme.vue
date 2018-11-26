@@ -10,10 +10,7 @@
         
         <!-- Dialogo para editar informe -->
         <v-dialog v-model="dialogEditInforme" persistent max-width="800px" v-if="informe.idestado===1">
-            <!-- Btn dialogo editar informe -->
-            <v-btn right fixed slot="activator" color="cyan darken-1" dark fab>
-                <v-icon>edit</v-icon>
-            </v-btn>
+            
             <v-card>
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-card-title>
@@ -85,13 +82,20 @@
                     <div class="font-weight-medium">Zona: {{informe.zona.nombre}}</div>
                     <v-divider class="mar"></v-divider>
                     <div class="font-weight-bold">Fecha límite: <br>{{ moment(informe.fechalimite).format("dddd D MMMM YYYY")}}</div>
+                    <v-divider class="mar"></v-divider>
+                    <!-- Btn dialogo editar informe -->
+                    <div class="text-xs-center" v-if="informe.idestado===1">
+                    <v-btn slot="activator" color="blue lighten-1" dark @click="dialogEditInforme = true" small>
+                        <v-icon>edit</v-icon>
+                    </v-btn>
+                    </div>
                 </v-flex>
             </v-card>
         </v-flex>
         <!-- Card título y descripción -->
         <v-flex xs12 md9 flexbox>
             <v-card color="white" height="100%">
-                <v-flex pa-4>
+                <v-flex pa-4> 
                     <div class="headline text-xs-center text-uppercase font-weight-medium">{{informe.titulo}}</div>
                     <v-divider class="mar"></v-divider>
                     <div v-html="informe.descripcion"></div>
@@ -130,19 +134,18 @@
                                             <v-divider class="mar"></v-divider> -->
                                     <div v-if="tarea.detalle">
                                         <div><span class="font-weight-light font-italic">Respuesta:</span></div>{{tarea.detalle.descripcion}}
-                                        <div class="caption font-italic text-xs-right">{{
-                                            moment(tarea.detalle.fecha_hora).format("lll")}}</div>
+                                        <div class="caption font-italic text-xs-right">{{ moment(tarea.detalle.fecha_hora).format("lll")}}</div>
                                     </div>
                                 </v-card-text>
                                 <v-card-actions>
                                     <!-- Btn editar tarea seleccionada -->
-                                    <v-btn right color="cyan darken-1" dark style="margin-left:1em" @click='openEditarTarea(tarea)'
-                                        v-if="informe.idestado===1 && !tarea.detalle">
+                                    <v-btn right color="blue lighten-1" dark style="margin-left:1em" @click='openEditarTarea(tarea)'
+                                        v-if="informe.idestado===1 && !tarea.detalle" small>
                                         <v-icon>edit</v-icon>
                                     </v-btn>
 
                                     <!-- Btn eliminar tarea seleccionada -->
-                                    <v-btn color="cyan darken-1" dark @click="openEliminarTarea(tarea)">
+                                    <v-btn color="red lighten-1" dark @click="openEliminarTarea(tarea)" v-if="informe.idestado===1 && !tarea.detalle" small>
                                         <v-icon>delete</v-icon>
                                     </v-btn>
                                 </v-card-actions>
@@ -197,7 +200,7 @@
                     <!-- Dialogo para agregar una nueva tarea -->
                     <div class="text-xs-right" v-if="informe.idestado===1">
                         <v-dialog v-model="dialogAddTarea" persistent max-width="800px">
-                            <v-btn slot="activator" fab small color="cyan darken-1" dark>
+                            <v-btn slot="activator" fab small color="green lighten-1" dark>
                                 <v-icon>add</v-icon>
                             </v-btn>
                             <v-card>
@@ -231,7 +234,42 @@
                             max-height="500" contain></v-carousel-item>
                     </v-carousel>
                 </v-flex>
+                <v-card-actions class="justify-end mb-2" v-if="informe.idestado===1">
+                    <v-btn color="green lighten-1" dark fab @click="dialogAddImg = true">
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                    <v-dialog v-model="dialogAddImg" width="500">
+                        <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                                Agregar imágenes
+                            </v-card-title>
+                            <v-card-text>
+                                <vue-dropzone ref="dropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-sending="sendingEvent">
+                                </vue-dropzone>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="primary" flat @click="cargarImagenes()">
+                                    Agregar
+                                </v-btn>
+                                <v-btn color="primary" flat @click="dialogAddImg = false">
+                                    Cancelar
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <v-btn class="mr-2 ml-2" color="red lighten-1" dark fab @click="dialogEliminarImg = true">
+                        <v-icon>delete</v-icon>
+                    </v-btn>
+                    <v-dialog v-model="dialogEliminarImg" width="500">
+                        <v-flex v-for="adjunto in informe.adjunto" :key="adjunto.idadjunto">
+                        
+                        </v-flex>
+                    </v-dialog>
+                </v-card-actions>
             </v-card>
+           
         </v-flex>
         <!-- Fin imagenes -->
         <!-- Alerta si esta cerrado -->

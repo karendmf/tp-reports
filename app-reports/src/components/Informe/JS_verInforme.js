@@ -4,10 +4,13 @@ import {
 import axios from "axios";
 import moment from "moment";
 import tarea from '@/components/Tarea/Tarea';
+import vue2Dropzone from "vue2-dropzone";
 export default {
     props: ["idInforme"],
     data() {
         return {
+            dialogEliminarImg: null,
+            dialogAddImg: null,
             areas: [],
             textareaRules: [v => !!v || "Es requerido que redacte un informe"],
             textSnack: null,
@@ -76,7 +79,25 @@ export default {
                     font: []
                 }]
             ],
-            fallo: false
+            fallo: false,
+            dropzoneOptions: {
+                url: axios.defaults.baseURL + "/informe/img/new",
+                maxFiles: 4,
+                addRemoveLinks: true,
+                thumbnailWidth: 140,
+                maxFilesize: 1,
+                autoProcessQueue: false,
+                acceptedFiles: 'image/*',
+                dictDefaultMessage: '<h2>Arrastre las imágenes aquí</h2><h4>O haga click para seleccionar desde una carpeta</h4>',
+                dictRemoveFile: 'Descartar',
+                dictMaxFilesExceeded: 'Solo se pueden adjuntar 4 imágenes',
+                dictFileTooBig: 'El archivo es muy grande. {{maxFilesize}}MB Max',
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                  "Cache-Control": "",
+                  "X-Requested-With": ""
+                }
+              }
         };
 
     },
@@ -88,7 +109,7 @@ export default {
     components: {
         tarea,
         VueEditor,
-        //vueDropzone: vue2Dropzone
+        vueDropzone: vue2Dropzone
     },
     created() {
         moment.locale("es");
@@ -100,6 +121,23 @@ export default {
         this.getAreas();
     },
     methods: {
+        sendingEvent(file, xhr, formData) {
+            var self = this
+            formData.append('idinforme', this.idInforme)
+        },
+        cargarImagenes(){
+            var self = this
+            self.$refs.dropzone.processQueue()
+            self.snackbar = true
+            self.textSnack = 'Imágenes agregadas.'
+            setTimeout(function(){
+                self.dialogAddImg = false
+                self.fetchInforme()
+            }, 2000);
+        },
+        eliminarImagen(imagen){
+
+        },
         eliminarTarea(idTarea) {
             var self = this
             axios.delete('/tarea/delete/' + idTarea, {
@@ -108,9 +146,12 @@ export default {
                 }
             }).then(function () {
                 self.snackbar = true
-                self.textSnack = 'Tarea Eliminada'
-                self.fetchInforme()
+                self.textSnack = 'Tarea eliminada.'
                 self.dialogEliminarTarea = false
+                setTimeout(function(){
+                    self.fetchInforme()
+                  }, 200);
+                
 
             })
         },
@@ -139,7 +180,7 @@ export default {
                     }
                 }).then(function () {
                     self.snackbar = true
-                    self.textSnack = 'Tarea actualizada'
+                    self.textSnack = 'Tarea actualizada.'
                     self.dialogEditTarea = false
                 })
             }
@@ -148,10 +189,8 @@ export default {
             var self = this
             self.$refs.tarea.submit(this.idInforme)
             self.snackbar = true
-            self.textSnack = 'Se agregaron tareas al informe'
-            self.fetchInforme()
+            self.textSnack = 'Se agregaron tareas al informe.'
             self.dialogAddTarea = false
-
         },
         editarInforme() {
             var self = this
@@ -179,8 +218,10 @@ export default {
                             console.log(self.informe)
                             self.snackbar = true
                             self.textSnack = 'Informe actualizado'
-                            self.dialogEdit = false
-                            self.fetchInforme()
+                            self.dialogEditInforme = false
+                            setTimeout(function(){
+                                self.fetchInforme()
+                            }, 200);
                         })
                         .catch(error => {
                             console.log(error.response)
