@@ -46,6 +46,7 @@ class TareaController extends Controller
         $tarea = Tarea::find($id);
         $tarea->titulo = $request->input('titulo');
         $tarea->descripcion = $request->input('descripcion');
+        $tarea->idarea = $request->input('idarea');
         $tarea->save();
         return response()->json($tarea, 200);
     }

@@ -1,11 +1,75 @@
 <template>
 <v-container fluid grid-list-md v-if="informe && colorP" fill-height>
     <v-layout row wrap>
+        <!-- Alerta si el informe vencio -->
         <v-flex xs12 v-if="(moment().format() > moment(informe.fechalimite).format()) && informe.estado.idestado == 1">
             <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
                 Informe caducado.
             </v-alert>
         </v-flex>
+        
+        <!-- Dialogo para editar informe -->
+        <v-dialog v-model="dialogEditInforme" persistent max-width="800px" v-if="informe.idestado===1">
+            <!-- Btn dialogo editar informe -->
+            <v-btn right fixed slot="activator" color="cyan darken-1" dark fab>
+                <v-icon>edit</v-icon>
+            </v-btn>
+            <v-card>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-card-title>
+                        <span class="headline">Editar Informe</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container grid-list-md>
+                            <!-- Alerta de error -->
+                            <v-alert v-model="fallo" dismissible color="error" icon="warning" if='error' outline>
+                                Error al actualizar informe
+                            </v-alert>
+                            <v-layout wrap>
+                                <v-flex xs12 sm12 md6>
+                                    <!-- título -->
+                                    <v-text-field label="Título" v-model='titulo' :rules="tituloRules" :counter="60" required
+                                        :value="`${informe.titulo}`"></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm12 md6>
+                                    <!-- fecha límite -->
+                                    <v-menu :close-on-content-click="true" v-model="fechalimite" :nudge-right="40" lazy
+                                        transition="scale-transition" offset-y full-width min-width="290px">
+                                        <v-text-field required clearable :rules="dateRules" slot="activator" label="Seleccione la fecha límite"
+                                            prepend-icon="event" readonly :value="formato"></v-text-field>
+                                        <v-date-picker v-model="date" @input="fechalimite = false" locale="es-mx" color="cyan lighten-3"
+                                            :min='moment(new Date()).format("YYYY-MM-DD")'></v-date-picker>
+                                    </v-menu>
+                                </v-flex>
+                                <v-flex xs12 sm12 md12>
+                                    <!-- descripción -->
+                                    <vue-editor v-model="descripcion" :editorToolbar='customToolbar' :value="`${informe.descripcion}`"></vue-editor>
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                    <!-- zonas select -->
+                                    <v-select :items="zonas" v-model="idzona" label="Zona" :rules="[v => !!v || 'Se requiere ingresar la zona']"
+                                        item-text="nombre" item-value="idzona"></v-select>
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                    <!-- prioridad select -->
+                                    <v-select v-model="idprioridad" :items="prioridad" :rules="[v => !!v || 'Se requiere ingresar la prioridad']"
+                                        label="Prioridad" item-text="nombre" item-value="idprioridad" required></v-select>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <!-- Botones para cancelar o guardar la edición de informe -->
+                        <v-btn color="cyan darken-2" flat @click="dialogEditInforme = false">Cancelar</v-btn>
+                        <v-btn :disabled="!valid" @click.prevent="editarInforme() && (dialogEditInforme = false)" color="cyan darken-2"
+                            flat>Guardar</v-btn>
+                    </v-card-actions>
+                </v-form>
+            </v-card>
+        </v-dialog>
+        <!-- Fin dialogo para editar -->
+        <!-- Card de información -->
         <v-flex xs12 md3 flexbox>
             <v-card color="white">
                 <v-flex pa-3 text-xs-center>
@@ -24,6 +88,7 @@
                 </v-flex>
             </v-card>
         </v-flex>
+        <!-- Card título y descripción -->
         <v-flex xs12 md9 flexbox>
             <v-card color="white" height="100%">
                 <v-flex pa-4>
@@ -33,6 +98,7 @@
                 </v-flex>
             </v-card>
         </v-flex>
+        <!-- Tareas -->
         <v-flex xs12 flexbox>
             <v-card color="white" height="100%">
                 <v-flex pa-4>
@@ -43,59 +109,138 @@
                         </v-badge>
                     </div>
                     <v-expansion-panel expand>
+                        <!-- paneles de expanción. Se recorre la colección de tareas que contiene el informe -->
                         <v-expansion-panel-content v-for="tarea in informe.tarea" :key="tarea.idtarea">
-                            <div slot="header">{{tarea.titulo}} <v-icon v-if="tarea.detalle" color="cyan darken-3">check_circle</v-icon></div>
-                            
+                            <div slot="header">{{tarea.titulo}} <v-icon v-if="tarea.detalle" color="cyan darken-3">check_circle</v-icon>
+                            </div>
                             <v-card>
+                                <!-- detalles de la tarea -->
                                 <v-card-text class="cyan lighten-5">
                                     <div><span class="font-weight-light font-italic">Descripción:</span></div>{{tarea.descripcion}}
                                     <v-divider class="mar"></v-divider>
                                     <div><span class="font-weight-light font-italic">Área encargada de la tarea:</span></div>{{tarea.area.nombre}}
                                     <v-divider class="mar"></v-divider>
+                                    <!-- barra de progreso de tarea -->
                                     <!-- <div><span class="font-weight-light font-italic">Progreso:</span></div>
-                                    <div class="text-xs-center">
-                                        <v-progress-circular :rotate="180" :size="100" :width="15" :value="value" color="cyan darken-3">
-                                            {{ value }}%
-                                        </v-progress-circular>
-                                    </div>
-                                    <v-divider class="mar"></v-divider> -->
+                                            <div class="text-xs-center">
+                                                <v-progress-circular :rotate="180" :size="100" :width="15" :value="value" color="cyan darken-3">
+                                                    {{ value }}%
+                                                </v-progress-circular>
+                                            </div>
+                                            <v-divider class="mar"></v-divider> -->
                                     <div v-if="tarea.detalle">
                                         <div><span class="font-weight-light font-italic">Respuesta:</span></div>{{tarea.detalle.descripcion}}
-                                        <div class="caption font-italic text-xs-right">{{ moment(tarea.detalle.fecha_hora).format("lll")}}</div>
+                                        <div class="caption font-italic text-xs-right">{{
+                                            moment(tarea.detalle.fecha_hora).format("lll")}}</div>
                                     </div>
                                 </v-card-text>
+                                <v-card-actions>
+                                    <!-- Btn editar tarea seleccionada -->
+                                    <v-btn right color="cyan darken-1" dark style="margin-left:1em" @click='openEditarTarea(tarea)'
+                                        v-if="informe.idestado===1 && !tarea.detalle">
+                                        <v-icon>edit</v-icon>
+                                    </v-btn>
+
+                                    <!-- Btn eliminar tarea seleccionada -->
+                                    <v-btn color="cyan darken-1" dark @click="openEliminarTarea(tarea)">
+                                        <v-icon>delete</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
                             </v-card>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
+                    <!-- Dialogo para editar tareas -->
+                    <v-dialog v-model="dialogEditTarea" persistent max-width="700px" v-if="tareaSeleccionada">
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">Editar Tarea</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-flex xs12>
+                                    <h4>Tarea: {{ tareaSeleccionada.titulo}}</h4>
+                                    <v-flex xs12 sm12>
+                                        <v-select v-model="tareaSeleccionada.idarea" label="Área involucrada" :items="areas"
+                                            item-text="nombre" item-value="idarea" hint="Seleccione el área que se encargará de realizar la tarea" />
+                                    </v-flex>
+                                    <v-flex xs12 sm12>
+                                        <v-text-field v-model="tareaSeleccionada.titulo" :counter="60" label="Título" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12 sm12>
+                                        <v-textarea :rules='textareaRules' auto-grow v-model="tareaSeleccionada.descripcion"
+                                            label="Descripción de tarea" hint="Especifique con detalles, que debe hacer el área seleccionada"
+                                            required></v-textarea>
+                                    </v-flex>
+                                </v-flex>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="cyan darken-2" flat @click="dialogEditTarea = false">Cancelar</v-btn>
+                                <v-btn color="cyan darken-2" flat @click.prevent="actualizarTarea(tareaSeleccionada)">Guardar</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <!-- Fin dialogo para editar tareas -->
+                    <v-dialog v-model="dialogEliminarTarea" max-width="290" v-if="tareaSeleccionada">
+                        <v-card>
+                            <v-card-title class="headline text-xs-center">¿Desea eliminar la tarea?</v-card-title>
+                            <v-card-actions class="justify-center">
+                                <v-btn color="cyan darken-3" flat="flat" @click="dialogEliminarTarea = false, eliminarTarea(tareaSeleccionada.idtarea)">
+                                    Si
+                                </v-btn>
+                                <v-btn color="cyan darken-3" flat="flat" @click.prevent="dialogEliminarTarea = false">
+                                    Cencelar
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <br>
+                    <!-- Dialogo para agregar una nueva tarea -->
+                    <div class="text-xs-right" v-if="informe.idestado===1">
+                        <v-dialog v-model="dialogAddTarea" persistent max-width="800px">
+                            <v-btn slot="activator" fab small color="cyan darken-1" dark>
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                            <v-card>
+                                <v-card-title class="headline" primary-title>
+                                    Agregar nuevas tareas
+                                </v-card-title>
+                                <v-card-text>
+                                    <tarea ref="tarea"></tarea>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="cyan darken-2" flat @click="dialogAddTarea = false">Cancelar</v-btn>
+                                    <v-btn :disabled="!valid" @click="agregarTarea() && (dialogAddTarea = false)" color="cyan darken-2"
+                                        flat>Guardar</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                    <!-- Fin dialogo para agregar una nueva tarea -->
                 </v-flex>
             </v-card>
         </v-flex>
+        <!-- Fin tareas -->
+        <!-- Imagenes -->
         <v-flex xs12 flexbox>
             <v-card color="white" height="100%">
                 <v-flex pa-4>
                     <div class="headline text-xs-center font-weight-medium">Imágenes</div>
                     <v-carousel light hide-delimiters>
-                        <v-carousel-item
-                            lazy
-                            v-for="adjunto in informe.adjunto"
-                            :key="adjunto.idadjunto"
-                            :src="url + adjunto.url"
-                            max-height="500"
-                            contain
-                            ></v-carousel-item>
+                        <v-carousel-item lazy v-for="adjunto in informe.adjunto" :key="adjunto.idadjunto" :src="url + adjunto.url"
+                            max-height="500" contain></v-carousel-item>
                     </v-carousel>
                 </v-flex>
             </v-card>
         </v-flex>
+        <!-- Fin imagenes -->
+        <!-- Alerta si esta cerrado -->
         <v-flex>
-            <v-alert
-            :value="true"
-            type="info"
-            v-if="informe.idestado===2"
-            >
-            Informe cerrado.
+            <v-alert :value="true" type="info" v-if="informe.idestado===2">
+                Informe cerrado.
             </v-alert>
         </v-flex>
+        <!-- Botón para cerrar informe -->
         <v-flex flexbox v-if="informe && informe.idestado==1">
             <v-btn @click="dialog = true" :disabled="!tareasCompletas()" color="cyan darken-3" flat>Cerrar informe</v-btn>
             <v-dialog v-model="dialog" max-width="290">
@@ -113,84 +258,17 @@
             </v-dialog>
         </v-flex>
     </v-layout>
+    <!-- Alerta flotante -->
+    <v-snackbar v-model="snackbar" top right multi-line="multi-line" :timeout="4000">
+        {{ textSnack }}
+        <v-btn color="cyan darken-1" dark flat @click="snackbar = false">
+            Cerrar
+        </v-btn>
+    </v-snackbar>
 </v-container>
 </template>
-<script>
-import axios from "axios";
-import moment from "moment";
-export default {
-    props: ["idInforme"],
-    data() {
-        return {
-            alert: true,
-            dialog: false,
-            moment: moment,
-            informe: null,
-            colorP: null,
-            value: 100,
-            valid: false,
-            cerrar: true,
-            url: this.$storageURL
-        };
-    },
-    created() {
-        moment.locale("es");
-        this.fetchInforme();
-    },
-    methods: {
-        colorPrioridad(prioridad) {
-            if (prioridad === 1) {
-                this.colorP = "teal darken-4";
-            } else if (prioridad === 2) {
-                this.colorP = "yellow darken-4";
-            } else if (prioridad === 3) {
-                this.colorP = "red darken-4";
-            }
-        },
-        cerrarInforme() {
-            var self = this;
-            axios.get("/informe/cerrar/" + self.informe.idinforme, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token")
-                    }
-                })
-                .then(function (response) {
-                    console.log(response.data) // eslint-disable-line no-console
-                    self.fetchInforme()
-                }).catch(function (err) {
-                    console.log(err.response) // eslint-disable-line no-console
-                })
-        },
-        fetchInforme() {
-            var self = this;
-            axios.get("/informe/ver/" + self.idInforme, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token")
-                    }
-                })
-                .then(function (response) {
-                    self.informe = response.data;
-                    self.colorPrioridad(self.informe.prioridad.idprioridad);
-                })
-                .catch(function (err) {
-                    if (err.response.status === 401) {
-                        self.$store.commit("setExpired", true);
-                        self.$router.push("/logout");
-                    }
-                });
-        },
-        tareasCompletas() {
-            var self = this
-            var tareas = self.informe.tarea
-            for (let i = 0; i < tareas.length; i++) {
-                if (tareas[i].detalle === null) {
-                    return self.cerrar = false
-                }
-            }
-            return self.cerrar
-        }
-    }
-};
+<script src="./JS_verInforme.js">
+
 </script>
 <style>
 .mar {

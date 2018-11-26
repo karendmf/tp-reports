@@ -65,7 +65,7 @@ export default {
 
     textarea: "",
     descripcion: null,
-    textareaRules: [v => !!v || "Es requerido que redacte un informe"],
+    textareaRules: [v => v == null || "Es requerido que redacte un informe"],
     
     dropzoneOptions: {
       url: axios.defaults.baseURL + "/informe/img/new",
@@ -105,7 +105,7 @@ export default {
   methods: {
     submit() {
       var self = this;
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate() && self.descripcion != null) {
         axios.post(
             "/informe/new", {
               idhseq: this.$store.state.h,
@@ -138,6 +138,8 @@ export default {
             }
             this.fallo = true;
           });
+      }else{
+        this.fallo = true;
       }
     },
     sendingEvent(file, xhr, formData) {

@@ -3,6 +3,7 @@
     <v-layout row wrap v-for="(line, index) in lines" v-bind:key="index">
         <v-flex xs6 sm6>
             <v-select
+            :rules="[v => !!v || 'Seleccione un área']"
             v-model="line.idarea"
             label="Área involucrada"
             :items="areas" 
@@ -11,10 +12,11 @@
             hint="Seleccione el área que se encargará de realizar la tarea"/>
         </v-flex>
         <v-flex xs6 sm6>
-            <v-text-field v-model="line.titulo" :counter="60" label="Título" required></v-text-field>
+            <v-text-field v-model="line.titulo" :counter="60" label="Título" :rules="[v => !!v || 'Ingrese un título']" required></v-text-field>
         </v-flex>
         <v-flex xs12 sm12>
             <v-textarea
+            :rules='textareaRules'
             rows = '1'
             auto-grow
             v-model="line.descripcion" 
@@ -27,13 +29,10 @@
             v-if="index + 1 === lines.length" @click="addLine" fab dark small color="cyan darken-1" outline>
                 <v-icon>add</v-icon>
             </v-btn>
-            
-          
             <v-btn slot="activator"
             @click="removeLine(index)" fab dark small color="red" outline>
                 <v-icon>close</v-icon>
             </v-btn>
-          
         </v-flex>
     </v-layout>
 </div>
@@ -42,12 +41,13 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Tarea",
+  props: ['tarea'],
   data() {
     return {
       areas: [],
       lines: [],
-      blockRemoval: true
+      blockRemoval: true,
+      textareaRules: [v => !!v || "Es requerido que redacte un informe"],
     };
   },
   watch: {
@@ -72,6 +72,7 @@ export default {
         }
       });
     },
+    
     getAreas() {
       var self = this;
       axios.get("/area/ver", {

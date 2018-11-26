@@ -72,7 +72,7 @@ class InformeController extends Controller
         $informe->fechalimite = $request->input('fechalimite');
         $informe->descripcion = $request->input('descripcion');
         $informe->idprioridad = $request->input('idprioridad');
-        $informe->idestado = $request->input('idestado');
+        $informe->idzona = $request->input('idzona');
         $informe->save();
         return response()->json($informe, 200);
     }
