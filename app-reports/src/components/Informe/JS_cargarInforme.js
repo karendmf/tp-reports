@@ -5,7 +5,7 @@ import {
   VueEditor
 } from "vue2-editor";
 import axios from "axios";
-import tarea from '@/components/Tarea/Tarea';
+import tarea from '@/components/Tarea/CargarTarea';
 export default {
   data: () => ({
     moment: moment,

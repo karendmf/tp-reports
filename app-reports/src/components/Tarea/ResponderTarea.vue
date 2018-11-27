@@ -36,7 +36,6 @@ export default {
         submit() {
             var self = this;
             if (this.$refs.form.validate()) {
-                // Native form submission is not yet supported
                 axios.post(
                         "/tareadetalle/new", {
                             descripcion: this.descripcion,

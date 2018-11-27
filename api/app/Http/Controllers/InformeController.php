@@ -59,6 +59,7 @@ class InformeController extends Controller
             $informe->hseq->user;
             $informe->tarea->each->area;
             $informe->tarea->each->detalle;
+            $informe->tarea->each->progreso;
             return response()->json($informe);
         }else{
             return response()->json('El informe no existe', 404);

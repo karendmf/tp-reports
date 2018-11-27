@@ -132,3 +132,13 @@ $router->group(['prefix' => 'tareadetalle', 'middleware' => 'jwt-auth'], functio
     $router->put('update/{id}', 'TareadetalleController@update');
     $router->delete('delete/{id}', 'TareadetalleController@delete');
 });
+
+//Progreso
+$router->group(['prefix' => 'tarea/progreso', 'middleware' => 'jwt-auth'], function () use ($router) {
+    $router->get('ver/{id}', 'ProgresoTareaController@show');
+    $router->get('verPorTarea/{id}', 'ProgresoTareaController@verPorTarea');
+    $router->post('new', 'ProgresoTareaController@create');
+    $router->put('update/{id}', 'ProgresoTareaController@update');
+    $router->delete('delete/{id}', 'ProgresoTareaController@delete');
+
+});

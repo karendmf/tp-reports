@@ -57,20 +57,23 @@ export default {
   },
   methods: {
     submit(idinforme) {
-      this.lines.forEach(element => {
-        if (element.titulo !== null && element.descripcion !== null) {
-          axios.post('/tarea/new', {
-            idarea: element.idarea,
-            idinforme: idinforme,
-            titulo: element.titulo,
-            descripcion: element.descripcion,
-          }, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
-        }
-      });
+        this.lines.forEach(element => {
+          if (element.titulo !== null && element.descripcion !== null) {
+            axios.post('/tarea/new', {
+              idarea: element.idarea,
+              idinforme: idinforme,
+              titulo: element.titulo,
+              descripcion: element.descripcion,
+            }, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+              }
+            })
+          }
+        });
+        Object.assign(this.$data, this.$options.data())
+        this.addLine()
+        this.getAreas();
     },
     
     getAreas() {
@@ -113,6 +116,6 @@ export default {
     if (!this.$store.state.isLogged) {
       this.$router.push('/signin')
     }
-  },
+  }
 };
 </script>

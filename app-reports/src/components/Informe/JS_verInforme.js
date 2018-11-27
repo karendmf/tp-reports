@@ -3,13 +3,15 @@ import {
 } from "vue2-editor";
 import axios from "axios";
 import moment from "moment";
-import tarea from '@/components/Tarea/Tarea';
+import tarea from '@/components/Tarea/CargarTarea';
 import vue2Dropzone from "vue2-dropzone";
 export default {
     props: ["idInforme"],
     data() {
         return {
-            dialogEliminarImg: null,
+            idImg: undefined,
+            dialogDeleteImg: null,
+            dialogMostrarImg: null,
             dialogAddImg: null,
             areas: [],
             textareaRules: [v => !!v || "Es requerido que redacte un informe"],
@@ -122,21 +124,44 @@ export default {
     },
     methods: {
         sendingEvent(file, xhr, formData) {
-            var self = this
             formData.append('idinforme', this.idInforme)
         },
         cargarImagenes(){
             var self = this
-            self.$refs.dropzone.processQueue()
-            self.snackbar = true
-            self.textSnack = 'Imágenes agregadas.'
-            setTimeout(function(){
-                self.dialogAddImg = false
-                self.fetchInforme()
-            }, 2000);
+            var count = self.$refs.dropzone.getQueuedFiles().length
+            if(count > 0){
+                self.$refs.dropzone.processQueue()
+                self.snackbar = true
+                self.textSnack = 'Imágenes agregadas.'
+                setTimeout(function(){
+                    self.$refs.dropzone.removeAllFiles()
+                    self.dialogAddImg = false
+                    self.fetchInforme()
+                }, 4500);
+            }else{
+                self.snackbar = true
+                self.textSnack = 'No se seleccionaron imágenes.'
+            }
         },
-        eliminarImagen(imagen){
-
+        openDeleteImg(idimagen){
+            var self = this
+            self.idImg = idimagen
+            self.dialogDeleteImg = true
+        },
+        eliminarImagen(idimagen){
+            var self = this
+            axios.delete('/informe/img/delete/' + idimagen, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            }).then(function () {
+                self.snackbar = true
+                self.textSnack = 'Imágen eliminada.'
+                self.dialogDeleteImg = false
+                setTimeout(function(){
+                    self.fetchInforme()
+                  }, 200);
+            })
         },
         eliminarTarea(idTarea) {
             var self = this
@@ -151,19 +176,15 @@ export default {
                 setTimeout(function(){
                     self.fetchInforme()
                   }, 200);
-                
-
             })
         },
         openEditarTarea(tarea) {
             var self = this
-            console.log('tarea a editar', tarea)
             self.tareaSeleccionada = tarea
             self.dialogEditTarea = true
         },
         openEliminarTarea(tarea) {
             var self = this
-            console.log('tarea a eliminar', tarea)
             self.tareaSeleccionada = tarea
             self.dialogEliminarTarea = true
         },
@@ -191,6 +212,9 @@ export default {
             self.snackbar = true
             self.textSnack = 'Se agregaron tareas al informe.'
             self.dialogAddTarea = false
+            setTimeout(function(){
+                self.fetchInforme()
+            }, 200);
         },
         editarInforme() {
             var self = this
@@ -213,9 +237,7 @@ export default {
                             }
                         )
                         .then(function (response) {
-                            //redirigir al informe creado
                             self.idinforme = response.data.idinforme
-                            console.log(self.informe)
                             self.snackbar = true
                             self.textSnack = 'Informe actualizado'
                             self.dialogEditInforme = false
@@ -224,7 +246,6 @@ export default {
                             }, 200);
                         })
                         .catch(error => {
-                            console.log(error.response)
                             if (error.response.status === 401) {
                                 self.$store.commit('setExpired', true)
                                 self.$router.push('/logout')

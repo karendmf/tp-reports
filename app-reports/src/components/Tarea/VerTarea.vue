@@ -56,8 +56,8 @@
             </v-flex>
         </v-card>
     </v-flex>
-    <v-flex xs12 md6>
-       <v-card >
+    <div class="flex xs12 md6">
+       <v-card>
             <v-flex pa-4 >
                 <div class="headline text-xs-center text-uppercase font-weight-medium">{{tarea.titulo}}</div>
                 <v-divider class="mar"></v-divider>
@@ -69,11 +69,19 @@
                 </v-flex>
             </v-card-actions>
             <v-card-actions v-if="!tarea.detalle"> 
-                <v-btn v-show="respuesta == false" flat block color="cyan darken-1" @click="respuesta = true">Responder y Cerrar Tarea</v-btn>
-                <v-btn v-show="respuesta == true" flat block color="cyan darken-1" @click="respuesta = false">Cancelar</v-btn>
+                <v-btn v-show="respuesta == false" dark block color="cyan darken-1" @click="respuesta = true">Responder y Cerrar Tarea</v-btn>
+                <v-btn v-show="respuesta == true" dark block color="cyan darken-1" @click="respuesta = false">Cancelar</v-btn>
             </v-card-actions>
+            
+            
         </v-card>
-    </v-flex>
+        <div class="flex xs12">
+                <div class="v-card theme--light">
+                <responder v-if="respuesta && !tarea.detalle" ref="responder" :idTarea='tarea.idtarea'></responder>
+                </div>
+            </div>
+    </div>
+    
         <v-flex xs12 md6 v-if="tarea.detalle">
             <v-card height="100%">
                 <v-flex pa-4 >
@@ -86,9 +94,10 @@
         </v-flex>
         <div class="flex xs12 md6">
             <div class="v-card theme--light">
-                <responder v-if="respuesta && !tarea.detalle" ref="responder" :idTarea='tarea.idtarea'></responder>
+                <progreso v-if="!tarea.detalle" :idTarea='tarea.idtarea'></progreso>
             </div>
        </div>
+        
 </v-layout>
 </v-container>
 </template>
@@ -97,6 +106,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import responder from '@/components/Tarea/ResponderTarea'
+import progreso from '@/components/Tarea/Progreso'
 export default {
     props: ['idTarea'],
     data(){
@@ -108,7 +118,8 @@ export default {
         }
     },
     components:{
-        responder
+        responder,
+        progreso
     },
     created() {
         moment.locale('es')

@@ -37,5 +37,8 @@ class Tarea extends Model
     public function detalle(){
         return $this->hasOne(Tareadetalle::class, 'idtarea');
     }
+    public function progreso(){
+        return $this->hasOne(ProgresoTarea::class, 'idtarea');
+    }
 
 }

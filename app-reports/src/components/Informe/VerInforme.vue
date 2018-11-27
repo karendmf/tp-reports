@@ -125,13 +125,15 @@
                                     <div><span class="font-weight-light font-italic">Área encargada de la tarea:</span></div>{{tarea.area.nombre}}
                                     <v-divider class="mar"></v-divider>
                                     <!-- barra de progreso de tarea -->
-                                    <!-- <div><span class="font-weight-light font-italic">Progreso:</span></div>
+                                    <div v-if="tarea.progreso">
+                                    <div><span class="font-weight-light font-italic">Progreso:</span></div>
                                             <div class="text-xs-center">
-                                                <v-progress-circular :rotate="180" :size="100" :width="15" :value="value" color="cyan darken-3">
-                                                    {{ value }}%
+                                                <v-progress-circular :rotate="180" :size="100" :width="15" :value="tarea.progreso.porcentaje" color="cyan darken-3">
+                                                    {{ tarea.progreso.porcentaje }}%
                                                 </v-progress-circular>
                                             </div>
-                                            <v-divider class="mar"></v-divider> -->
+                                            <v-divider class="mar"></v-divider>
+                                    </div>
                                     <div v-if="tarea.detalle">
                                         <div><span class="font-weight-light font-italic">Respuesta:</span></div>{{tarea.detalle.descripcion}}
                                         <div class="caption font-italic text-xs-right">{{ moment(tarea.detalle.fecha_hora).format("lll")}}</div>
@@ -227,6 +229,7 @@
         <!-- Imagenes -->
         <v-flex xs12 flexbox>
             <v-card color="white" height="100%">
+                <!-- carousel de img de informe -->
                 <v-flex pa-4>
                     <div class="headline text-xs-center font-weight-medium">Imágenes</div>
                     <v-carousel light hide-delimiters>
@@ -235,12 +238,14 @@
                     </v-carousel>
                 </v-flex>
                 <v-card-actions class="justify-end mb-2" v-if="informe.idestado===1">
-                    <v-btn color="green lighten-1" dark fab @click="dialogAddImg = true">
+                    <!-- Btn abre el dialogo para agregar img -->
+                    <v-btn small color="green lighten-1" dark fab @click="dialogAddImg = true">
                         <v-icon>add</v-icon>
                     </v-btn>
-                    <v-dialog v-model="dialogAddImg" width="500">
+                    <!-- Dialogo agregar img -->
+                    <v-dialog v-model="dialogAddImg" width="600">
                         <v-card>
-                            <v-card-title class="headline grey lighten-2" primary-title>
+                            <v-card-title class="headline" primary-title>
                                 Agregar imágenes
                             </v-card-title>
                             <v-card-text>
@@ -250,22 +255,72 @@
                             <v-divider></v-divider>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="primary" flat @click="cargarImagenes()">
-                                    Agregar
-                                </v-btn>
-                                <v-btn color="primary" flat @click="dialogAddImg = false">
+                                <v-btn color="cyan darken-2" flat @click="dialogAddImg = false">
                                     Cancelar
+                                </v-btn>
+                                <v-btn color="cyan darken-2" flat @click="cargarImagenes()">
+                                    Agregar
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-                    <v-btn class="mr-2 ml-2" color="red lighten-1" dark fab @click="dialogEliminarImg = true">
+
+                    <!-- Btn para abrir dialogo de mostrar img a eliminar -->
+                    <v-btn small class="mr-2 ml-2" color="red lighten-1" dark fab @click="dialogMostrarImg = true">
                         <v-icon>delete</v-icon>
                     </v-btn>
-                    <v-dialog v-model="dialogEliminarImg" width="500">
-                        <v-flex v-for="adjunto in informe.adjunto" :key="adjunto.idadjunto">
-                        
+                    <!-- Dialogo de img a eliminar -->
+                    <v-dialog v-model="dialogMostrarImg" max-width="700px">
+                        <v-card>
+                            <v-container grid-list-sm fluid>
+                                <v-layout row wrap>
+                                    <v-flex v-for="adjunto in informe.adjunto" :key="adjunto.idadjunto" xs4 d-flex>
+                            <v-card flat tile class="d-flex">
+                                <v-img
+                                :src="url + adjunto.url"
+                                :lazy-src="url + adjunto.url"
+                                aspect-ratio="1"
+                                class="grey lighten-2"
+                                >
+                                <v-layout
+                                    slot="placeholder"
+                                    fill-height
+                                    align-center
+                                    justify-center
+                                    ma-0
+                                >
+                                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                </v-layout>
+                                <!-- Btn de eliminar imágen -->
+                                <div class="text-xs-right">
+                                    <v-btn fab small color="red lighten-1" dark @click="openDeleteImg(adjunto.idadjunto)"><v-icon>clear</v-icon></v-btn>
+                                </div>
+                                </v-img>
+                            </v-card>
                         </v-flex>
+                        <!-- Dialogo para confirmar la eliminarción de imágen -->
+                        <v-dialog v-model="dialogDeleteImg" max-width="290" v-if="idImg">
+                                        <v-card>
+                                            <v-card-title class="headline text-xs-center">¿Desea eliminar la imágen?</v-card-title>
+                                            <v-card-actions class="justify-center">
+                                                <v-btn color="cyan darken-3" flat="flat" @click="eliminarImagen(idImg)">
+                                                    Si
+                                                </v-btn>
+                                                <v-btn color="cyan darken-3" flat="flat" >
+                                                    Cencelar
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                </v-layout>
+                            </v-container>
+                        <v-card-actions class="justify-end mr-3">
+                            <v-btn color="cyan darken-1" dark @click="dialogMostrarImg = false">
+                            Cerrar
+                            </v-btn>
+                        </v-card-actions>
+                        </v-card>
+                        
                     </v-dialog>
                 </v-card-actions>
             </v-card>
@@ -313,4 +368,5 @@
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
+
 </style>

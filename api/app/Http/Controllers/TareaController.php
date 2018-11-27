@@ -22,6 +22,7 @@ class TareaController extends Controller
             $tarea->informe->zona;
             $tarea->informe->prioridad;
             $tarea->informe->adjunto;
+            $tarea->progreso;
             return response()->json($tarea);
         }else{
             return response()->json('La tarea no existe', 404);
