@@ -112,7 +112,7 @@
                             <div class="headline text-xs-center font-weight-medium">Tareas</div>
                         </v-badge>
                     </div>
-                    <v-expansion-panel expand>
+                    <v-expansion-panel expand v-if="informe.tarea.length > 0">
                         <!-- paneles de expanción. Se recorre la colección de tareas que contiene el informe -->
                         <v-expansion-panel-content v-for="tarea in informe.tarea" :key="tarea.idtarea">
                             <div slot="header">{{tarea.titulo}} <v-icon v-if="tarea.detalle" color="cyan darken-3">check_circle</v-icon>
@@ -154,6 +154,9 @@
                             </v-card>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
+					<div v-if="informe.tarea.length == 0">
+						<h4>No hay tareas ingresadas.</h4>
+					</div>
                     <!-- Dialogo para editar tareas -->
                     <v-dialog v-model="dialogEditTarea" persistent max-width="700px" v-if="tareaSeleccionada">
                         <v-card>
@@ -232,10 +235,13 @@
                 <!-- carousel de img de informe -->
                 <v-flex pa-4>
                     <div class="headline text-xs-center font-weight-medium">Imágenes</div>
-                    <v-carousel light hide-delimiters>
+                    <v-carousel light hide-delimiters v-if="informe.adjunto.length > 0">
                         <v-carousel-item lazy v-for="adjunto in informe.adjunto" :key="adjunto.idadjunto" :src="url + adjunto.url"
                             max-height="500" contain></v-carousel-item>
                     </v-carousel>
+					<div v-if="informe.adjunto.length == 0">
+						<h4>No hay imágenes</h4>
+					</div>
                 </v-flex>
                 <v-card-actions class="justify-end mb-2" v-if="informe.idestado===1">
                     <!-- Btn abre el dialogo para agregar img -->

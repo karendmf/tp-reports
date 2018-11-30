@@ -342,6 +342,7 @@ export default {
                     }
                 })
                 .then(function (response) {
+					console.log(response.data) // eslint-disable-line no-console
                     self.informe = response.data;
                     self.date = self.informe.fechalimite
                     self.idzona = self.informe.zona.idzona

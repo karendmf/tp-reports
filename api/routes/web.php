@@ -75,6 +75,9 @@ $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () 
     $router->delete('delete/{id}', 'InformeController@delete');
     $router->get('me/{idhseq}', 'InformeController@informesHseq');
     $router->get('cerrar/{id}', 'InformeController@cerrar');
+    $router->get('cantInformes/{idhseq}', 'InformeController@cantidadInformesPropios');
+    $router->get('cantPrioridad/{idhseq}', 'InformeController@cantidadPrioridad');
+    $router->get('cantMesCreate/{idhseq}', 'InformeController@cantidadPorMesCreate');
 });
 
 //Imagenes de informe:

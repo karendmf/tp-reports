@@ -24,7 +24,7 @@
                     <v-list-tile-content>
                         <v-list-tile-title>Temperatura</v-list-tile-title>
                         <v-list-tile-sub-title class="text--primary">{{ clima.channel.item.condition.temp}} °c</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="text--primary">Cielo {{ clima.channel.item.condition.text }}</v-list-tile-sub-title>
+                        <!-- <v-list-tile-sub-title class="text-primary">Cielo {{ clima.channel.item.condition.text }}</v-list-tile-sub-title> -->
                     </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>

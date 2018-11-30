@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Informe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InformeController extends Controller
 {
@@ -93,5 +94,34 @@ class InformeController extends Controller
         $informe->idestado = 2;
         $informe->save();
         return response()->json('Informe cerrado', 200);
+    }
+    public function cantidadInformesPropios($idhseq){
+
+        $cerrado = Informe::where('idhseq', $idhseq)->where('idestado',2)->count();
+        $abierto = Informe::where('idhseq', $idhseq)->where('idestado',1)->count();
+        $vencido = Informe::where('idhseq', $idhseq)->where('idestado',1)->whereDate('fechalimite', '<', date('Y-m-d'))->count();
+        $total = Informe::where('idhseq', $idhseq)->count();
+        $cantidad['cerrado'] = $cerrado;
+        $cantidad['abierto'] = $abierto;
+        $cantidad['vencido'] = $vencido;
+
+        return response()->json($cantidad);
+    }
+    public function cantidadPrioridad($idhseq){
+        $cantidad= DB::table('informe as i')
+        ->join('prioridad as p', 'i.idprioridad', '=', 'p.idprioridad')
+        ->select(DB::raw('count(i.idprioridad) as cantidad, p.nombre as nombre'))
+        ->where('i.idhseq', '=', $idhseq)
+        ->groupBy('i.idprioridad')
+        ->get();
+        return response()->json($cantidad);
+    }
+    public function cantidadPorMesCreate($idhseq){
+        $cantidad = DB::table('informe as i')
+        ->select(DB::raw('count(MONTH(i.create_at)) as cantidad, MONTH(i.create_at) as mes'))
+        ->groupBy(DB::raw('MONTH(i.create_at)'))
+        ->where('idhseq', $idhseq)
+        ->get();
+        return response()->json($cantidad);
     }
 }
