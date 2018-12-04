@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Adjuntoinforme;
+use App\Models\AdjuntoInforme;
 use Illuminate\Http\Request;
 
 class AdjuntoinformeController extends Controller

@@ -16,6 +16,7 @@ $router->get('/', function () use ($router) {
 });
 
 
+
 $router->post('login', 'AuthController@login');
 $router->post('solicitud/new', 'SolicitudController@create');
 
@@ -78,6 +79,7 @@ $router->group(['prefix' => 'informe', 'middleware' => 'jwt-auth'], function () 
     $router->get('cantInformes/{idhseq}', 'InformeController@cantidadInformesPropios');
     $router->get('cantPrioridad/{idhseq}', 'InformeController@cantidadPrioridad');
     $router->get('cantMesCreate/{idhseq}', 'InformeController@cantidadPorMesCreate');
+    $router->post('mail', 'InformeController@enviarMail');
 });
 
 //Imagenes de informe:
@@ -145,3 +147,19 @@ $router->group(['prefix' => 'tarea/progreso', 'middleware' => 'jwt-auth'], funct
     $router->delete('delete/{id}', 'ProgresoTareaController@delete');
 
 });
+
+//Modifica Informe:
+$router->group(['prefix' => 'informe/modifica', 'middleware' => 'jwt-auth'], function () use ($router) {
+    $router->get('ver', 'ModificainformeController@index');
+    $router->get('ver/{id}', 'ModificainformeController@show');
+    $router->get('historial/{idinforme}', 'ModificainformeController@modInforme');
+    $router->post('new', 'ModificainformeController@create');
+});
+
+//Cambio estado informe:
+    $router->group(['prefix' => 'informe/estado', 'middleware' => 'jwt-auth'], function () use ($router) {
+        $router->get('ver', 'CambioestadoController@index');
+        $router->get('ver/{id}', 'CambioestadoController@show');
+        $router->get('quien/{idinforme}', 'CambioestadoController@quienCerro');
+        $router->post('new', 'CambioestadoController@create');
+    });

@@ -46,4 +46,10 @@ class Informe extends Model
     public function tarea(){
         return $this->hasMany(Tarea::class, 'idinforme');
     }
+    public function modifica(){
+        return $this->hasMany(ModificaInforme::class, 'idinforme');
+    }
+    public function cambioestado(){
+        return $this->hasMany(CambioEstado::class, 'idinforme');
+    }
 }

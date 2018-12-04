@@ -44,6 +44,8 @@ export default {
   props: ['tarea'],
   data() {
     return {
+      
+      coleccionIdArea:[],
       areas: [],
       lines: [],
       blockRemoval: true,
@@ -57,8 +59,11 @@ export default {
   },
   methods: {
     submit(idinforme) {
-        this.lines.forEach(element => {
+      var self=this
+        self.lines.forEach(element => {
+          
           if (element.titulo !== null && element.descripcion !== null) {
+            
             axios.post('/tarea/new', {
               idarea: element.idarea,
               idinforme: idinforme,
@@ -68,6 +73,12 @@ export default {
               headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
               }
+            }).then(function(response){
+              var idarea= response.data.idarea
+              var titulo= response.data.titulo
+              var descripcion = response.data.descripcion
+              var msj = 'Nueva tarea disponible.'
+              self.enviarMail(idarea, titulo, descripcion, msj)
             })
           }
         });
@@ -75,7 +86,22 @@ export default {
         this.addLine()
         this.getAreas();
     },
-    
+    enviarMail(idarea, titulo, descripcion, msj){
+      console.log(msj)
+      axios.post('informe/mail',{
+        idarea: idarea,
+        titulo: titulo,
+        descripcion: descripcion,
+        msj: msj
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      }).then(function(){
+        console.log(msj)
+      })
+    },
     getAreas() {
       var self = this;
       axios.get("/area/ver", {

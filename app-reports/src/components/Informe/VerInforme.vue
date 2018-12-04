@@ -1,14 +1,16 @@
 <template>
-<v-container fluid grid-list-md v-if="informe && colorP" fill-height>
-    <v-layout row wrap>
+<v-container fluid grid-list-md v-if="informe && colorP" fill-height id="imprimir">
+    
+    <v-layout row wrap >
         <!-- Alerta si el informe vencio -->
         <v-flex xs12 v-if="(moment().format() > moment(informe.fechalimite).format()) && informe.estado.idestado == 1">
             <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
                 Informe caducado.
             </v-alert>
         </v-flex>
-        
+       
         <!-- Dialogo para editar informe -->
+
         <v-dialog v-model="dialogEditInforme" persistent max-width="800px" v-if="informe.idestado===1">
             
             <v-card>
@@ -82,12 +84,19 @@
                     <div class="font-weight-medium">Zona: {{informe.zona.nombre}}</div>
                     <v-divider class="mar"></v-divider>
                     <div class="font-weight-bold">Fecha límite: <br>{{ moment(informe.fechalimite).format("dddd D MMMM YYYY")}}</div>
+                    
                     <v-divider class="mar"></v-divider>
+                    <div v-if="historial" class="caption">Ultima modificación: {{moment(historial.fecha_hora).format("DD/MM/YYYY")}}<br>Por: {{historial.hseq.user.apellido}} {{historial.hseq.user.nombre}}</div>
+                    <v-divider class="mar" v-if="quienCerro"></v-divider>
+                    <div v-if="quienCerro">Cerrado el {{moment(quienCerro.fecha_hora).format("DD/MM/YYYY")}}<br>Por {{quienCerro.hseq.user.apellido}} {{quienCerro.hseq.user.nombre}}</div>
                     <!-- Btn dialogo editar informe -->
                     <div class="text-xs-center" v-if="informe.idestado===1">
                     <v-btn slot="activator" color="blue lighten-1" dark @click="dialogEditInforme = true" small>
                         <v-icon>edit</v-icon>
                     </v-btn>
+                    </div>
+                    <div v-if="informe.idestado===2">
+                        <v-btn color="cyan darken-3" dark @click="download()">Descargar PDF</v-btn>
                     </div>
                 </v-flex>
             </v-card>
@@ -280,9 +289,11 @@
                         <v-card>
                             <v-container grid-list-sm fluid>
                                 <v-layout row wrap>
-                                    <v-flex v-for="adjunto in informe.adjunto" :key="adjunto.idadjunto" xs4 d-flex>
+                                    <v-flex v-for="(adjunto, index) in informe.adjunto" :key="adjunto.idadjunto" xs4 d-flex>
+                                        
                             <v-card flat tile class="d-flex">
                                 <v-img
+                                :id="'img' + index"
                                 :src="url + adjunto.url"
                                 :lazy-src="url + adjunto.url"
                                 aspect-ratio="1"
@@ -340,6 +351,7 @@
             </v-alert>
         </v-flex>
         <!-- Botón para cerrar informe -->
+        
         <v-flex flexbox v-if="informe && informe.idestado==1">
             <v-btn @click="dialog = true" :disabled="!tareasCompletas()" color="cyan darken-3" flat>Cerrar informe</v-btn>
             <v-dialog v-model="dialog" max-width="290">
@@ -356,7 +368,9 @@
                 </v-card>
             </v-dialog>
         </v-flex>
+        
     </v-layout>
+    
     <!-- Alerta flotante -->
     <v-snackbar v-model="snackbar" top right multi-line="multi-line" :timeout="4000">
         {{ textSnack }}

@@ -59,7 +59,13 @@
       </v-flex>
 
     </v-layout>
-
+  <!-- Alerta flotante -->
+    <v-snackbar v-model="snackbar" top right multi-line="multi-line" :timeout="4000">
+        {{ textSnack }}
+        <v-btn color="cyan darken-1" dark flat @click="snackbar = false">
+            Cerrar
+        </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 

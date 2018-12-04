@@ -18,7 +18,7 @@
                     <td>{{ props.item.usuario.apellido }}</td>
                     <td class="text-xs-left">{{ props.item.informe.titulo }}</td>
                     <td class="text-xs-left">{{ props.item.informe.tarea.length }}</td>
-                    <td class="text-xs-left">{{ moment(props.item.informe.fechalimite).format("dddd D MMMM YYYY") }}</td>
+                    <td class="text-xs-left">{{ moment(props.item.informe.fechalimite).format("DD/MM/YYYY") }}</td>
                     <td class="text-xs-left">{{ props.item.informe.estado.nombre }}</td>
                     <td class="text-xs-left">{{ props.item.informe.prioridad.nombre }}</td>
                     <td class="justify-center">

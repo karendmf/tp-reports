@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Informe;
+use App\Models\Area;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestEmail;
 
 class InformeController extends Controller
 {
@@ -112,9 +115,13 @@ class InformeController extends Controller
         ->join('prioridad as p', 'i.idprioridad', '=', 'p.idprioridad')
         ->select(DB::raw('count(i.idprioridad) as cantidad, p.nombre as nombre'))
         ->where('i.idhseq', '=', $idhseq)
-        ->groupBy('i.idprioridad')
+        ->groupBy('i.idprioridad','p.nombre')
         ->get();
-        return response()->json($cantidad);
+        if (count($cantidad) > 0){
+            return response()->json($cantidad);
+        }else{
+            return response()->json(0);
+        }
     }
     public function cantidadPorMesCreate($idhseq){
         $cantidad = DB::table('informe as i')
@@ -122,6 +129,24 @@ class InformeController extends Controller
         ->groupBy(DB::raw('MONTH(i.create_at)'))
         ->where('idhseq', $idhseq)
         ->get();
-        return response()->json($cantidad);
+        if (count($cantidad) > 0){
+            return response()->json($cantidad);
+        }else{
+            return response()->json(0);
+        }
+    }
+    public function enviarMail(Request $request){
+        $idarea = $request->input('idarea');
+        $area = Area::find($idarea);
+        $email = $area->user->email;
+
+        $titulo = $request->input('titulo');
+        $descripcion = $request->input('descripcion');
+        $msj = $request->input('msj');
+
+        $data = ['tarea' => $titulo, 'descripcion' => $descripcion, 'msj' => $msj];
+
+        Mail::to($email)->send(new TestEmail($data));
+        return response()->json('Enviado');
     }
 }

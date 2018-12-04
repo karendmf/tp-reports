@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Estado extends Model
+class ModificaInforme extends Model
 {
-    protected $table = 'estado';
-    protected $primaryKey = 'idestado';
+    protected $table = 'modifica';
+    protected $primaryKey = 'idmodifica';
     public $timestamps = false;
 
     /**
@@ -16,7 +16,7 @@ class Estado extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
+        'idinforme', 'idhseq', 'fecha_hora'
     ];
 
     /**
@@ -27,12 +27,11 @@ class Estado extends Model
     /* protected $hidden = [
 
 ];
-    */
+ */
     public function informe(){
-        return $this->hasMany(Informe::class, 'idinforme');
+        return $this->belongsTo(Informe::class, 'idinforme');
     }
-    public function cambioestado(){
-        return $this->hasMany(CambioEstado::class, 'idestado');
+    public function hseq(){
+        return $this->belongsTo(Hseq::class, 'idhseq');
     }
-
 }

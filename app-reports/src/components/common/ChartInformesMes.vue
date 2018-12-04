@@ -10,7 +10,7 @@ import {
 } from 'vue-chartjs'
 
 export default {
-  extends: Line,
+  extends: Bar,
   props: {
     chartdata: {
       type: Object,
@@ -27,7 +27,9 @@ export default {
           scales: {
             yAxes: [{
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
+                min: 0,
+                stepSize: 1,
               },
               gridLines: {
                 display: true

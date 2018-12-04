@@ -35,5 +35,11 @@ class Hseq extends Model
     public function informe(){
         return $this->hasMany(Informe::class, 'idinforme', 'idhseq');
     }
+    public function modifica(){
+        return $this->hasMany(ModificaInforme::class, 'idhseq');
+    }
+    public function cambioestado(){
+        return $this->hasMany(CambioEstado::class, 'idhseq');
+    }
 
 }

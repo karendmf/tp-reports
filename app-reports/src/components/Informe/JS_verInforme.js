@@ -5,10 +5,14 @@ import axios from "axios";
 import moment from "moment";
 import tarea from '@/components/Tarea/CargarTarea';
 import vue2Dropzone from "vue2-dropzone";
+import jsPDF from 'jspdf'
+import 'jspdf-autotable';
 export default {
     props: ["idInforme"],
     data() {
         return {
+            quienCerro: null,
+            historial: null,
             idImg: undefined,
             dialogDeleteImg: null,
             dialogMostrarImg: null,
@@ -95,11 +99,11 @@ export default {
                 dictMaxFilesExceeded: 'Solo se pueden adjuntar 4 imágenes',
                 dictFileTooBig: 'El archivo es muy grande. {{maxFilesize}}MB Max',
                 headers: {
-                  Authorization: "Bearer " + localStorage.getItem("token"),
-                  "Cache-Control": "",
-                  "X-Requested-With": ""
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    "Cache-Control": "",
+                    "X-Requested-With": ""
                 }
-              }
+            }
         };
 
     },
@@ -123,32 +127,109 @@ export default {
         this.getAreas();
     },
     methods: {
+
+        //Descargar PDF
+        download() {
+            var date = moment().format("ddd D MMMM YYYY")
+            var self = this;
+            var informe = self.informe
+            var pdf = new jsPDF('p', 'mm', 'a4');
+            let pdfName = informe.titulo;
+
+            pdf.setFontSize(15);
+            pdf.setTextColor('#006064');
+            pdf.text(10, 10, 'Informe');
+
+            
+            //Detalles
+            pdf.setFontType("italic");
+            pdf.setTextColor('#FFFFF');
+            pdf.setFontSize(10);
+            pdf.text(date, 165,8)
+            pdf.text('HSEQ: ' + informe.hseq.user.nombre + ' ' + informe.hseq.user.apellido, 14, 25, )
+            pdf.text('Creado: ' + moment(informe.create_at).format("dddd D MMMM YYYY"), 14, 30, )
+            pdf.text('Cantidad de tareas: ' + informe.tarea.length, 14, 35, )
+            pdf.text('Zona: ' + informe.zona.nombre, 14, 40, )
+            pdf.text('Fecha límite: ' + moment(informe.fechalimite).format("dddd D MMMM YYYY"), 14, 45, )
+            pdf.text('Cerrado el '+ moment(self.quienCerro.fecha_hora).format("dddd D MMMM YYYY") + ', por '+ self.quienCerro.hseq.user.nombre + ' ' + self.quienCerro.hseq.user.apellido , 14, 50, )
+            pdf.line(90,55,12,55)
+            // Coloca titulo
+            pdf.setFontType("bold");
+            pdf.setFontSize(14);
+            pdf.text(informe.titulo, 15, 70, {
+                width: 180
+            });
+            
+            // Coloca descripcion 
+            pdf.setFontType("normal");
+            pdf.setFontSize(12);
+            pdf.text('Descripción:', 20, 78, )
+            pdf.fromHTML(informe.descripcion, 20, 79, {
+                width: 170
+            });
+
+            pdf.addPage('a4', 'landscape');
+
+            pdf.setTextColor('#006064');
+            pdf.setFontSize(15);
+            pdf.text(10, 10, 'Tareas');
+
+            var columns = ["Área", "Título", "Descripción", "Respuesta", "Hora cierre"];
+            var rows = [];
+
+            for(var i = 0; i < informe.tarea.length ; i++){
+                var fecha = moment(informe.tarea[i].detalle.fecha_hora).format('D MMM YYYY')
+                var temporal = [
+                    informe.tarea[i].area.nombre,
+                    informe.tarea[i].titulo,
+                    informe.tarea[i].descripcion,
+                    informe.tarea[i].detalle.descripcion,
+                    fecha
+                ];
+                rows.push(temporal);
+            }
+
+            pdf.autoTable(columns, rows, {
+                theme: 'grid',
+                styles: { overflow: 'linebreak', columnWidth: 'wrap' },
+                columnStyles: {
+                    0: {columnWidth: 25},
+                    1: {columnWidth: 50},
+                    2: {columnWidth: 90}, 
+                    3: {columnWidth: 80}, 
+                    4: {columnWidth: 25}, 
+                  }
+            });
+            
+            pdf.save(pdfName + '.pdf');
+            
+        },
         sendingEvent(file, xhr, formData) {
             formData.append('idinforme', this.idInforme)
         },
-        cargarImagenes(){
+        cargarImagenes() {
             var self = this
             var count = self.$refs.dropzone.getQueuedFiles().length
-            if(count > 0){
+            if (count > 0) {
                 self.$refs.dropzone.processQueue()
                 self.snackbar = true
                 self.textSnack = 'Imágenes agregadas.'
-                setTimeout(function(){
+                setTimeout(function () {
                     self.$refs.dropzone.removeAllFiles()
                     self.dialogAddImg = false
                     self.fetchInforme()
                 }, 4500);
-            }else{
+            } else {
                 self.snackbar = true
                 self.textSnack = 'No se seleccionaron imágenes.'
             }
         },
-        openDeleteImg(idimagen){
+        openDeleteImg(idimagen) {
             var self = this
             self.idImg = idimagen
             self.dialogDeleteImg = true
         },
-        eliminarImagen(idimagen){
+        eliminarImagen(idimagen) {
             var self = this
             axios.delete('/informe/img/delete/' + idimagen, {
                 headers: {
@@ -158,9 +239,9 @@ export default {
                 self.snackbar = true
                 self.textSnack = 'Imágen eliminada.'
                 self.dialogDeleteImg = false
-                setTimeout(function(){
+                setTimeout(function () {
                     self.fetchInforme()
-                  }, 200);
+                }, 200);
             })
         },
         eliminarTarea(idTarea) {
@@ -173,9 +254,9 @@ export default {
                 self.snackbar = true
                 self.textSnack = 'Tarea eliminada.'
                 self.dialogEliminarTarea = false
-                setTimeout(function(){
+                setTimeout(function () {
                     self.fetchInforme()
-                  }, 200);
+                }, 200);
             })
         },
         openEditarTarea(tarea) {
@@ -199,20 +280,39 @@ export default {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token")
                     }
-                }).then(function () {
+                }).then(function (response) {
                     self.snackbar = true
                     self.textSnack = 'Tarea actualizada.'
                     self.dialogEditTarea = false
+                    var idarea= response.data.idarea
+                    var titulo= response.data.titulo
+                    var descripcion = response.data.descripcion
+                    var msj = 'Se modificó una tarea.'
+                    self.enviarMail(idarea, titulo, descripcion, msj)
+
                 })
             }
         },
+        enviarMail(idarea, titulo, descripcion, msj){
+            axios.post('informe/mail',{
+              idarea: idarea,
+              titulo: titulo,
+              descripcion: descripcion,
+              msj: msj
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+              }
+            })
+          },
         agregarTarea() {
             var self = this
             self.$refs.tarea.submit(this.idInforme)
             self.snackbar = true
             self.textSnack = 'Se agregaron tareas al informe.'
             self.dialogAddTarea = false
-            setTimeout(function(){
+            setTimeout(function () {
                 self.fetchInforme()
             }, 200);
         },
@@ -241,7 +341,9 @@ export default {
                             self.snackbar = true
                             self.textSnack = 'Informe actualizado'
                             self.dialogEditInforme = false
-                            setTimeout(function(){
+                            self.updateHistorial()
+                            setTimeout(function () {
+                                
                                 self.fetchInforme()
                             }, 200);
                         })
@@ -256,6 +358,18 @@ export default {
                     this.fallo = true;
                 }
             }
+        },
+        updateHistorial(){
+            axios.post(
+                "/informe/modifica/new/", {
+                    idinforme: this.idInforme,
+                    idhseq: this.$store.state.h
+                }, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+            )
         },
         getAreas() {
             var self = this;
@@ -329,10 +443,28 @@ export default {
                 })
                 .then(function (response) {
                     console.log(response.data) // eslint-disable-line no-console
-                    self.fetchInforme()
+                    self.snackbar = true
+                    self.textSnack = 'Informe cerrado'
+                    self.cambiarEstado()
+                    setTimeout(function () {
+                        self.fetchInforme()
+                    }, 200);
                 }).catch(function (err) {
                     console.log(err.response) // eslint-disable-line no-console
                 })
+        },
+        cambiarEstado(){
+            axios.post(
+                "/informe/estado/new", {
+                    idinforme: this.idInforme,
+                    idhseq: this.$store.state.h,
+                    idestado: 2
+                }, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+            )
         },
         fetchInforme() {
             var self = this;
@@ -342,7 +474,6 @@ export default {
                     }
                 })
                 .then(function (response) {
-					console.log(response.data) // eslint-disable-line no-console
                     self.informe = response.data;
                     self.date = self.informe.fechalimite
                     self.idzona = self.informe.zona.idzona
@@ -357,6 +488,29 @@ export default {
                         self.$router.push("/logout");
                     }
                 });
+
+            axios.get("/informe/modifica/historial/"+ self.idInforme,{
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(function(response){
+                if(response.data !=0){
+                    self.historial = response.data
+                }
+                
+            })
+            axios.get("/informe/estado/quien/"+ self.idInforme,{
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(function(response){
+                if(response.data !=0){
+                    self.quienCerro = response.data
+                }
+                
+            })
         },
         tareasCompletas() {
             var self = this

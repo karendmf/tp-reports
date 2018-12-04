@@ -8,6 +8,8 @@ import axios from "axios";
 import tarea from '@/components/Tarea/CargarTarea';
 export default {
   data: () => ({
+    snackbar: false,
+    textSnack: null,
     moment: moment,
     date: new Date().toISOString().substr(0, 10),
     customToolbar: [
@@ -126,8 +128,9 @@ export default {
             self.idinforme = response.data.idinforme
             self.$refs.tarea.submit(self.idinforme)
             self.$refs.dropzone.processQueue()
-            alert('Informe creado')
             setTimeout(function(){
+              self.snackbar = true
+              self.textSnack = 'Informe creado.'
               self.$router.push('/informe/'+self.idinforme+'/ver')
             }, 700);
           })
@@ -137,6 +140,8 @@ export default {
               self.$router.push('/logout')
             }
             this.fallo = true;
+            self.snackbar = true
+            self.textSnack = 'Error al cargar un informe'
           });
       }else{
         this.fallo = true;
