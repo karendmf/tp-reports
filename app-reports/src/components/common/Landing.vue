@@ -130,7 +130,7 @@ export default {
           if (response.data != 0){
             var jsonarray= response.data
             var labels = jsonarray.map(function(e) {
-              return moment('2017-'+e.mes+'-11').format('MMMM')
+              return moment(e.mes, "MM").format('MMMM')
             })
             var data = jsonarray.map(function(e) {
               return e.cantidad;

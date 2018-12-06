@@ -43,6 +43,13 @@
                 </v-form>
             </v-flex>
         </v-layout>
+        <!-- Alerta flotante -->
+        <v-snackbar v-model="snackbar" top right multi-line="multi-line" :timeout="4000">
+            {{ textSnack }}
+            <v-btn color="cyan darken-1" dark flat @click="snackbar = false">
+                Cerrar
+            </v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 <script>
@@ -50,6 +57,8 @@
     import router from '@/router'
     export default {
         data: () => ({
+            textSnack: null,
+            snackbar: false,
             alert: false,
             valid: true,
             rol: null,
@@ -158,7 +167,7 @@
                             }
                             self.$store.commit('setError', error.response.data) 
                             self.$store.commit('setLoading', false)
-                            //console.log('catch', error.response.data)
+                            console.log('catch', error.response)
                         });
                 }
             },

@@ -3,12 +3,11 @@
     
     <v-layout row wrap >
         <!-- Alerta si el informe vencio -->
-        <v-flex xs12 v-if="(moment().format() > moment(informe.fechalimite).format()) && informe.estado.idestado == 1">
+        <v-flex xs12 v-if="(moment().utcOffset(-3).format('DD/MM/YYYY') > moment(informe.fechalimite).format('DD/MM/YYYY')) && informe.estado.idestado == 1">
             <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
                 Informe caducado.
             </v-alert>
         </v-flex>
-       
         <!-- Dialogo para editar informe -->
 
         <v-dialog v-model="dialogEditInforme" persistent max-width="800px" v-if="informe.idestado===1">
@@ -86,7 +85,7 @@
                     <div class="font-weight-bold">Fecha límite: <br>{{ moment(informe.fechalimite).format("dddd D MMMM YYYY")}}</div>
                     
                     <v-divider class="mar"></v-divider>
-                    <div v-if="historial" class="caption">Ultima modificación: {{moment(historial.fecha_hora).format("DD/MM/YYYY")}}<br>Por: {{historial.hseq.user.apellido}} {{historial.hseq.user.nombre}}</div>
+                    <div v-if="historial" class="caption">Ultima modificación: <br>{{moment(historial.fecha_hora).format("DD/MM/YYYY, h:mm:ss a")}}<br>Por {{historial.hseq.user.apellido}} {{historial.hseq.user.nombre}}</div>
                     <v-divider class="mar" v-if="quienCerro"></v-divider>
                     <div v-if="quienCerro">Cerrado el {{moment(quienCerro.fecha_hora).format("DD/MM/YYYY")}}<br>Por {{quienCerro.hseq.user.apellido}} {{quienCerro.hseq.user.nombre}}</div>
                     <!-- Btn dialogo editar informe -->
@@ -96,7 +95,7 @@
                     </v-btn>
                     </div>
                     <div v-if="informe.idestado===2">
-                        <v-btn color="cyan darken-3" dark @click="download()">Descargar PDF</v-btn>
+                        <v-btn color="cyan darken-2" dark @click="download()">Descargar PDF</v-btn>
                     </div>
                 </v-flex>
             </v-card>

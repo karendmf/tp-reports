@@ -30,7 +30,6 @@ import Logout from '@/components/Sesion/Logout'
 //COMMON:
 import Landing from '@/components/common/Landing'
 import Calendario from '@/components/common/Calendario'
-import mail from '@/components/enviarEmail'
 
 /** Definición de rutas */
 const routes = [
@@ -235,14 +234,7 @@ const routes = [
         next()
       }
     }
-  },
-  {
-    path: '/enviarmail',
-    component: mail,
-    meta: {
-      requiresAuth: true
-    }
-  },
+  }
 ]
 
 Vue.use(Router)

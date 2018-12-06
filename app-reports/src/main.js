@@ -15,7 +15,8 @@ Vue.use(VueGoogleCharts, {'language': 'es'})
 Vue.use(vueEventCalendar, {locale: 'es', color: 'gray'}) 
 Vue.config.productionTip = false
 
-Vue.prototype.$storageURL = 'http://localhost/Trabajo%20Final/tp-reports/api/storage/'
+//Vue.prototype.$storageURL = 'http://localhost/Trabajo%20Final/tp-reports/api/storage/'
+Vue.prototype.$storageURL = 'http://localhost/tp-reports/api/storage/'
 axios.defaults.baseURL = 'http://localhost:8000'
 //axios.defaults.baseURL = 'http://192.168.0.18:8000';
 

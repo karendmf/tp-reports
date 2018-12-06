@@ -19,7 +19,7 @@
           <v-card-text>
             <div>Cantidad de tareas: {{informe.tarea.length}}</div>
             <div>Fecha límite:
-              <span v-if="moment().format() > moment(informe.fechalimite).format() && informe.estado.idestado==1" class="font-weight-thin font-italic">CADUCADO</span>
+              <span v-if="moment().utcOffset(-3).format('DD/MM/YYYY') > moment(informe.fechalimite).format('DD/MM/YYYY') && informe.estado.idestado==1" class="font-weight-thin font-italic">CADUCADO</span>
               <br>
               {{ moment(informe.fechalimite).format("dddd D MMMM YYYY") }}
             </div>

@@ -25,6 +25,13 @@
                 </v-form>
             </v-flex>
         </v-layout>
+        <!-- Alerta flotante -->
+        <v-snackbar v-model="snackbar" top right multi-line="multi-line" :timeout="4000">
+            {{ textSnack }}
+            <v-btn color="cyan darken-1" dark flat @click="snackbar = false">
+                Cerrar
+            </v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 <script>
@@ -32,7 +39,8 @@ import axios from 'axios'
 import router from '@/router'
 export default {
     data: () => ({
-
+        textSnack: null,
+        snackbar: false,
         nombre: null,
         fallo: null,
         valid: true,
@@ -56,9 +64,14 @@ export default {
                     }).then(function (response) {
                         console.log(response) // eslint-disable-line no-console
                         self.$store.commit('registrarUsuario', null)
-                        //redirigir a la info del usuario cargado
-                        router.push('/')
+                        self.snackbar = true
+                        self.textSnack = 'Usuario cargado correctamente.'
                         self.$refs.form.reset()
+                        setTimeout(function () {
+                            router.push('/')
+                        }, 600);
+                        
+                        
                     })
                     .catch(error => {
                         if (error.response.status === 401){

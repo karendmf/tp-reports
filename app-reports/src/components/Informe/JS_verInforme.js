@@ -20,8 +20,8 @@ export default {
             areas: [],
             textareaRules: [v => !!v || "Es requerido que redacte un informe"],
             textSnack: null,
-            descripcion: null,
             snackbar: false,
+            descripcion: null,
             titulo: '',
             tituloRules: [
                 v => !!v || "Se requiere un título",
@@ -174,7 +174,7 @@ export default {
             pdf.setFontSize(15);
             pdf.text(10, 10, 'Tareas');
 
-            var columns = ["Área", "Título", "Descripción", "Respuesta", "Hora cierre"];
+            var columns = ["Área", "Título", "Descripción", "Respuesta", "Cierre"];
             var rows = [];
 
             for(var i = 0; i < informe.tarea.length ; i++){
@@ -343,9 +343,8 @@ export default {
                             self.dialogEditInforme = false
                             self.updateHistorial()
                             setTimeout(function () {
-                                
                                 self.fetchInforme()
-                            }, 200);
+                            }, 400);
                         })
                         .catch(error => {
                             if (error.response.status === 401) {
@@ -448,7 +447,7 @@ export default {
                     self.cambiarEstado()
                     setTimeout(function () {
                         self.fetchInforme()
-                    }, 200);
+                    }, 400);
                 }).catch(function (err) {
                     console.log(err.response) // eslint-disable-line no-console
                 })
