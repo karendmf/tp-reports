@@ -74,3 +74,8 @@
         }
     }
 </script>
+<style>
+#clima{
+    margin-right: 1em
+}
+</style>

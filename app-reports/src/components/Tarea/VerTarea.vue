@@ -35,7 +35,7 @@
       <v-card>
         <v-container grid-list-sm fluid>
           <v-layout row wrap>
-            <v-carousel light hide-delimiters>
+            <v-carousel light hide-delimiters v-if="tarea.informe.adjunto.length > 0">
                 <v-carousel-item
                     lazy
                     v-for="adjunto in tarea.informe.adjunto"
@@ -44,7 +44,10 @@
                     max-height="550"
                     contain
                     ></v-carousel-item>
-                </v-carousel>
+            </v-carousel>
+            <div v-if="tarea.informe.adjunto.length == 0">
+						<h4>No hay imágenes adjuntas en el informe</h4>
+					</div>
           </v-layout>
         </v-container>
       </v-card>
@@ -57,7 +60,7 @@
         </v-card>
     </v-flex>
     <div class="flex xs12 md6">
-       <v-card>
+       <v-card >
             <v-flex pa-4 >
                 <div class="headline text-xs-center text-uppercase font-weight-medium">{{tarea.titulo}}</div>
                 <v-divider class="mar"></v-divider>

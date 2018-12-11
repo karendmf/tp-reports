@@ -58,11 +58,6 @@ export default {
     return {
       idProgreso: null,
       porcentaje: '?'
-      /* - Aceptada 0
-      - Asignando Personal 15
-      - Realizando Tarea 40
-      - Verificando Tarea 80
-      - Terminada 100 */
 
     }
   },
@@ -79,7 +74,6 @@ export default {
           if (response){
             self.porcentaje = response.data[0].porcentaje
             self.idProgreso = response.data[0].idavance
-            console.log(self.porcentaje) // eslint-disable-line no-console
           }
         }).catch(function (err) {
           if (err.response && err.response.status === 401) {
@@ -101,7 +95,7 @@ export default {
               }
             }
           )
-          .then(function (response) {
+          .then(function () {
             setTimeout(function () {
               self.fetchProgreso()
             }, 200);

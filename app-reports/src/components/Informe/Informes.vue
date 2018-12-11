@@ -4,7 +4,7 @@
       <loading></loading>
     </v-layout>
     <v-layout row wrap v-if="informes">
-      <v-flex xs12 sm6 md3 flexbox text-xs-center v-for="informe in informes" :key="informe.idinforme">
+      <v-flex xs12 sm6 md4 flexbox text-xs-center v-for="informe in informes" :key="informe.idinforme">
         <v-card height="100%">
           <v-card-title primary-title class="justify-center">
             <div>
@@ -12,14 +12,14 @@
                 <v-chip label :color="colorPrioridad(informe.prioridad.idprioridad)" text-color="white">Prioridad
                   {{informe.prioridad.nombre}}</v-chip>
               </span>
-              <h3>{{informe.titulo}}</h3>
+              <h4>{{informe.titulo}}</h4>
             </div>
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
             <div>Cantidad de tareas: {{informe.tarea.length}}</div>
             <div>Fecha límite:
-              <span v-if="moment().utcOffset(-3).format('DD/MM/YYYY') > moment(informe.fechalimite).format('DD/MM/YYYY') && informe.estado.idestado==1" class="font-weight-thin font-italic">CADUCADO</span>
+              <span v-if="moment().utcOffset(-3).format('DD/MM/YYYY') > moment(informe.fechalimite).format('DD/MM/YYYY') && informe.estado.idestado==1" class="font-weight-thin font-italic">Fuera de tiempo</span>
               <br>
               {{ moment(informe.fechalimite).format("dddd D MMMM YYYY") }}
             </div>

@@ -1,12 +1,14 @@
 <template>
-    <v-container mt-5>
+    <v-container mt-5 style="margin-top: 3em">
         <v-layout wrap align-space-around justify-center row fill-height elevation-5 mt-3>
-          <v-flex xs12 md6 class='cyan lighten-3' pa-5>
-            <h1>Lorem Ipsum</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at urna mi. Nullam quis justo et arcu
-              fermentum blandit. Phasellus finibus justo tellus, ac tempor sapien porttitor sit amet. In hac habitasse
-              platea dictumst. Quisque in risus risus. Duis quis lacus massa. Phasellus porttitor dolor et pulvinar
-              rhoncus.</p>
+          <v-flex xs12 md6 class='cyan lighten-3' pa-5 id='welcome'>
+            <img src="@/assets/logotipo@3x.png" alt="logotipo de la app" id='logo-img'>
+            <div>
+              <br>
+              <h1 class="font-weight-black">¡BIENVENIDO!</h1>
+              <p class="font-weight-regular title">Inicia sesión con tu usuario y contraseña, o solicita uno completanto el formulario.</p>
+            </div>
+              
           </v-flex>
           <v-flex xs12 md6 text-xs-center pa-4>
             <v-window v-model="step">
@@ -42,3 +44,16 @@ export default {
   },
 }
 </script>
+<style>
+#welcome{
+  background-image: url("../../assets/capextop.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+#logo-img{
+  height: auto;
+  width: 100%;
+}
+</style>

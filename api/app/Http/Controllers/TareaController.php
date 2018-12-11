@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tarea;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
@@ -63,4 +64,11 @@ class TareaController extends Controller
         $tareas->each->area;
         return response()->json($tareas);
     }
+    
+    public function estadisticaEstado($idarea){
+        $datos = DB::select('SELECT count(d.idtarea_detalle) as cerradas, count(t.idtarea)-count(d.idtarea_detalle) as abiertas FROM tarea t left JOIN tarea_detalle d ON t.idtarea=d.idtarea WHERE idarea='.$idarea);
+        return response()->json($datos);
+        
+    }
+
 }

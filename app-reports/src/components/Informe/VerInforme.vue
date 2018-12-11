@@ -3,9 +3,9 @@
     
     <v-layout row wrap >
         <!-- Alerta si el informe vencio -->
-        <v-flex xs12 v-if="(moment().utcOffset(-3).format('DD/MM/YYYY') > moment(informe.fechalimite).format('DD/MM/YYYY')) && informe.estado.idestado == 1">
+        <v-flex xs12 v-if="(moment().utcOffset(-3).format('DD/MM/YYYY') > moment(informe.fechalimite).utcOffset(-3).format('DD/MM/YYYY')) && informe.estado.idestado == 1">
             <v-alert v-model="alert" dismissible type="warning" color="cyan darken-3">
-                Informe caducado.
+                Este informe se encuentra fuera de la fecha límite.
             </v-alert>
         </v-flex>
         <!-- Dialogo para editar informe -->
@@ -155,7 +155,7 @@
                                     </v-btn>
 
                                     <!-- Btn eliminar tarea seleccionada -->
-                                    <v-btn color="red lighten-1" dark @click="openEliminarTarea(tarea)" v-if="informe.idestado===1 && !tarea.detalle" small>
+                                    <v-btn color="red lighten-1" dark @click="openEliminarTarea(tarea)" v-if="informe.idestado===1 && !tarea.detalle  && !tarea.progreso" small>
                                         <v-icon>delete</v-icon>
                                     </v-btn>
                                 </v-card-actions>

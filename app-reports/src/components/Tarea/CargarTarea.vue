@@ -87,7 +87,6 @@ export default {
         this.getAreas();
     },
     enviarMail(idarea, titulo, descripcion, msj){
-      console.log(msj)
       axios.post('informe/mail',{
         idarea: idarea,
         titulo: titulo,
@@ -99,7 +98,7 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
       }).then(function(){
-        console.log(msj)
+        //console.log(msj)
       })
     },
     getAreas() {

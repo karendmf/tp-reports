@@ -62,11 +62,12 @@ export default {
                             Authorization: 'Bearer ' + localStorage.getItem('token')
                         }
                     }).then(function (response) {
-                        console.log(response) // eslint-disable-line no-console
-                        self.$store.commit('registrarUsuario', null)
+                        //console.log(response) // eslint-disable-line no-console
                         self.snackbar = true
                         self.textSnack = 'Usuario cargado correctamente.'
                         self.$refs.form.reset()
+                        self.enviarMail()
+                        self.$store.commit('registrarUsuario', null)
                         setTimeout(function () {
                             router.push('/')
                         }, 600);
@@ -81,6 +82,32 @@ export default {
                         this.fallo = true
                     });
             }
+        },
+        enviarMail(){
+                var iduser = this.$store.state.r
+                var titulo = 'Bienvenido a REPORTS'
+                var descripcion = 'El usuario es la primera letra de tu nombre + tu apellido. Ej: Laura Rodriguez: lrodriguez. Tu contraseña es tu número de DNI'
+                var msj = 'Nuevo usuario área registrado.'
+                axios.post('user/mail',{
+                    iduser: iduser,
+                    titulo: titulo,
+                    descripcion: descripcion,
+                    msj: msj
+                },
+                {
+                    headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }).then(function(response){
+                    console.log(response.data)
+                })
+                .catch(error => {
+                        if (error.response.status === 401){
+                            self.$store.commit('setExpired', true)
+                            self.$router.push('/logout')
+                        }
+                         console.log(error.response)
+                    });
         },
         clear() {
             this.$refs.form.reset()

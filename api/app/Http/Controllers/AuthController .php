@@ -10,6 +10,8 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestEmail;
 
 class AuthController extends Controller
 {
@@ -119,6 +121,21 @@ class AuthController extends Controller
         $usuario->area;
         
         return response()->json($usuario);
+    }
+
+    public function enviarMail(Request $request){
+        $iduser = $request->input('iduser');
+        $user = User::find($iduser);
+        $email = $user->email;
+
+        $titulo = $request->input('titulo');
+        $descripcion = $request->input('descripcion');
+        $msj = $request->input('msj');
+
+        $data = ['tarea' => $titulo, 'descripcion' => $descripcion, 'msj' => $msj];
+
+        Mail::to($email)->send(new TestEmail($data));
+        return response()->json('Enviado'); 
     }
 
     //Funcion test

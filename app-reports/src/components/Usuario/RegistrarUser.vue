@@ -147,7 +147,8 @@
                             console.log(response) // eslint-disable-line no-console
                             self.$store.commit('setError', null)
                             if (response.status === 201){
-                                self.$store.commit('registrarUsuario', response.data)
+                                var iduser = response.data
+                                self.$store.commit('registrarUsuario', iduser)
                                 if (self.rol === 'hseq') {
                                     //console.log('es hseq')
                                     router.push('/usuario/nuevo/hseq')
@@ -175,6 +176,7 @@
                 this.$refs.form.reset()
                 this.imageUrl = ''
             },
+            
 
         },
         computed: {

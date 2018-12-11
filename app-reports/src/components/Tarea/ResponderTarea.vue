@@ -2,7 +2,7 @@
 <v-container>
         <v-flex class="text-xs-center" mt-3>
             <h1>Respuesta</h1>
-            <div class="text-xs-left font-weight-light">Luego de enviar la respuesta, la tarea quedará como terminada y no podrá ser modificada.</div>
+            <div class="text-xs-left font-weight-light">Luego de enviar la respuesta, la tarea quedará como cerrada y no podrá ser modificada.</div>
         </v-flex>
         <v-flex mt-2>
             <v-form ref="form" v-model="valid" lazy-validation>
